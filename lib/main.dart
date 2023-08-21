@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:math';
 
 void main() {
@@ -121,6 +122,9 @@ class MyHomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () {
+                      //http.read('http://google.com').then((contents) {
+                      //  print(contents); // Here we output the contents of google.com.
+                      //});
                       print('button pressed!');
                     },
                     child: Text('Synthesise'),
