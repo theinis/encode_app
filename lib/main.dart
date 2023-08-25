@@ -3,7 +3,19 @@ import 'package:provider/provider.dart';
 import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:math';
 
-IRestApiClient restApiClient = 0;
+late IRestApiClient restApiClient;
+
+Future<Result> simpleCall() async {
+
+  final response = await restApiClient.post(
+    '/Authentication/Authenticate',
+    data: {'username': 'john', 'password': 'Flutter_is_awesome1!'},
+  );
+  
+  return response; 
+}
+
+
 
 void main() async {
 
@@ -13,6 +25,7 @@ void main() async {
     options: RestApiClientOptions(
     
       //Defines your base API url eg. https://mybestrestapi.com
+      //baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
       baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
       //Enable caching of response data
         cacheEnabled: true,
@@ -135,7 +148,7 @@ class MyHomePage extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton(
+                  child: ElevatedButton (
                     onPressed: () {
                       dna.text = generateRandomString('ATCG', 100);
                       print('encode pressed!');
@@ -145,13 +158,10 @@ class MyHomePage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton(
+                  child: ElevatedButton (
                     onPressed: () {
                       
-                      final response = await restApiClient.post(
-                        '/Authentication/Authenticate',
-                        data: {'username': 'john', 'password': 'Flutter_is_awesome1!'},
-                      );
+                      var response = simpleCall();
 
                       print(response);
 
