@@ -1,0 +1,1762 @@
+{
+  "status": {
+    "deviceName": "Kilobaser",
+    "currentState": {
+      "mode": "placeholderInserted",
+      "cartridgeType": "2",
+      "initDone": 1,
+      "chipKind": "1",
+      "cartridgeActivated": [
+        "2"
+      ],
+      "cartridge": {
+        "id": "2023-08-16T11:11:24Z-15e5c897",
+        "createdAt": "2023-08-16T11:11:24.124812785Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "2023-08-16T11:11:24Z-15e5c897",
+        "initialized": true,
+        "name": "",
+        "type": "2",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "2023-08-30T11:11:24.124812785Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 81,
+        "baseCount": {
+          "A": 52,
+          "C": 62,
+          "G": 57,
+          "T": 60
+        },
+        "baseMass": null,
+        "baseOrder": null,
+        "cartridgePriority": 0,
+        "imgText": "",
+        "colorCode": "",
+        "specOpsColor": "",
+        "lostBasesColor": "",
+        "layoutTextColor": "",
+        "layoutHoverColor": "",
+        "imgHoverColor": "",
+        "settingsTextColor": "",
+        "fixed": false
+      },
+      "lidPosition": "closed",
+      "squeezeNOK": 0,
+      "cartridgePosition": "ignore",
+      "cartridgePresent": -1,
+      "vialPresent": 0,
+      "gasHP": "ignore 450",
+      "temp": "\u003c 65",
+      "duration": 30000,
+      "ignoreGasCritical": true,
+      "checkLidMotorSyncError": true,
+      "checkCartridgeRemovedPrematurely": false,
+      "disposeVial": 0
+    },
+    "pendingState": {
+      "mode": "placeholderInserted",
+      "cartridgeType": "2",
+      "initDone": 1,
+      "chipKind": "1",
+      "cartridgeActivated": [
+        "2"
+      ],
+      "cartridge": {
+        "id": "2023-08-16T11:11:24Z-15e5c897",
+        "createdAt": "2023-08-16T11:11:24.124812785Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "2023-08-16T11:11:24Z-15e5c897",
+        "initialized": true,
+        "name": "",
+        "type": "2",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "2023-08-30T11:11:24.124812785Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 81,
+        "baseCount": {
+          "A": 52,
+          "C": 62,
+          "G": 57,
+          "T": 60
+        },
+        "baseMass": null,
+        "baseOrder": null,
+        "cartridgePriority": 0,
+        "imgText": "",
+        "colorCode": "",
+        "specOpsColor": "",
+        "lostBasesColor": "",
+        "layoutTextColor": "",
+        "layoutHoverColor": "",
+        "imgHoverColor": "",
+        "settingsTextColor": "",
+        "fixed": false
+      },
+      "lidPosition": "closed",
+      "squeezeNOK": 0,
+      "cartridgePosition": "ignore",
+      "cartridgePresent": -1,
+      "vialPresent": 0,
+      "gasHP": "ignore 450",
+      "temp": "\u003c 65",
+      "duration": 30000,
+      "ignoreGasCritical": true,
+      "checkLidMotorSyncError": true,
+      "checkCartridgeRemovedPrematurely": false,
+      "disposeVial": 0
+    },
+    "currentProcessRunId": "",
+    "runIds": [],
+    "runDurations": null,
+    "runInformations": null,
+    "currentRunIndex": 0,
+    "currentProtocol": null,
+    "currentCheckpointProgress": 0,
+    "pendingProcessRunIds": [
+      "2023-08-24T09:24:04Z-0747512d"
+    ],
+    "serverTime": "2023-08-24T09:26:05.275038613Z",
+    "lidOpenWarningTime": null,
+    "supportedOPModes": {
+      "2": [
+        "2"
+      ],
+      "3": [
+        "2",
+        "3-BHQ1",
+        "3-single-label"
+      ]
+    },
+    "cleaningRunning": false,
+    "updateRunning": false,
+    "currentHWDState": {
+      "chipKind": "",
+      "pressureHigh": 202.70753,
+      "cartridgePresent": true
+    },
+    "sensorHealth": {
+      "sensorStateMode": 0,
+      "sensorErrorType": ""
+    },
+    "versionError": null
+  },
+  "processRunQueue": [
+    {
+      "id": "2023-08-24T09:24:04Z-0747512d",
+      "createdAt": "2023-08-24T09:25:59.51746924Z",
+      "updatedAt": "0001-01-01T00:00:00Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "deviceName": "Kilobaser",
+      "title": "Oligo 2023-08-24.2",
+      "processIds": [
+        "cc31652e"
+      ],
+      "processTypes": [
+        "insertPlaceholder"
+      ],
+      "processType": "insertPlaceholder",
+      "cartridgeType": "2",
+      "chipKind": "-1",
+      "answers": {},
+      "cartridgeId": "2023-08-16T11:11:24Z-15e5c897",
+      "duration": 8900,
+      "durations": [
+        8900
+      ],
+      "cartridgeExpiresAt": "0001-01-01T00:00:00Z",
+      "priority": 1,
+      "isContinuedRun": false,
+      "isCancelling": false
+    }
+  ],
+  "processRuns": [
+    {
+      "id": "2023-08-17T09:38:25Z-1ae2ebdf",
+      "createdAt": "2023-08-17T09:38:25.390773138Z",
+      "updatedAt": "2023-08-17T14:21:24.449719565Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "deviceName": "Kilobaser",
+      "title": "Oligo 2023-08-17.1",
+      "processIds": [
+        "ccfb909d",
+        "3a6dcba4"
+      ],
+      "processTypes": [
+        "insertChip",
+        "synthesis"
+      ],
+      "processType": "synthesis",
+      "cartridgeType": "2",
+      "chipKind": "2",
+      "startedAt": "2023-08-17T09:38:34.581118911Z",
+      "finishedAt": "2023-08-17T14:20:16.018259207Z",
+      "answers": {
+        "sequence": "AGTCACACACTGAAGTGTGAAGTCACACACTGAAGTGTGA"
+      },
+      "cartridgeId": "2023-08-16T11:11:24Z-15e5c897",
+      "duration": 8205290,
+      "durations": [
+        4800,
+        8200490
+      ],
+      "totalBasesCountBefore": 121,
+      "cartridgeExpiresAt": "2023-08-30T11:11:24.124812785Z",
+      "isContinuedRun": false,
+      "isCancelling": false
+    },
+    {
+      "id": "2023-08-16T11:49:44Z-0d2a4d77",
+      "createdAt": "2023-08-16T11:49:44.577803716Z",
+      "updatedAt": "2023-08-16T14:16:55.042458816Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "deviceName": "Kilobaser",
+      "title": "Oligo 2023-08-16.5",
+      "processIds": [
+        "ccfb909d",
+        "3a6dcba4"
+      ],
+      "processTypes": [
+        "insertChip",
+        "synthesis"
+      ],
+      "processType": "synthesis",
+      "cartridgeType": "2",
+      "chipKind": "2",
+      "startedAt": "2023-08-16T11:50:06.315709587Z",
+      "finishedAt": "2023-08-16T14:17:10.758016584Z",
+      "answers": {
+        "sequence": "AGTGAAGTGTCTGTGAAGTCACACACTGA"
+      },
+      "cartridgeId": "2023-08-16T11:11:24Z-15e5c897",
+      "duration": 6528560,
+      "durations": [
+        4800,
+        6523760
+      ],
+      "totalBasesCountBefore": 150,
+      "cartridgeExpiresAt": "2023-08-30T11:11:24.124812785Z",
+      "isContinuedRun": false,
+      "isCancelling": false
+    },
+    {
+      "id": "2023-08-16T11:06:04Z-94783ac8",
+      "createdAt": "2023-08-16T11:06:39.20508862Z",
+      "updatedAt": "2023-08-16T11:48:19.756067844Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "deviceName": "Kilobaser",
+      "title": "Initialize Cartridge Type",
+      "processIds": [
+        "ccfb909d",
+        "a42a69b2",
+        "a3f74374",
+        "0bd74955"
+      ],
+      "processTypes": [
+        "insertChip",
+        "cartridgeInit",
+        "cartridgeActivate",
+        "initializeSystem"
+      ],
+      "processType": "initializeSystem",
+      "cartridgeType": "2",
+      "chipKind": "2",
+      "startedAt": "2023-08-16T11:07:51.599151747Z",
+      "finishedAt": "2023-08-16T11:48:34.727722654Z",
+      "answers": {
+        "sequence": "ACGT"
+      },
+      "cartridgeId": "",
+      "duration": 2087730,
+      "durations": [
+        4800,
+        85200,
+        1198400,
+        799330
+      ],
+      "cartridgeExpiresAt": "0001-01-01T00:00:00Z",
+      "isContinuedRun": false,
+      "isCancelling": false
+    },
+    {
+      "id": "2023-08-16T10:48:14Z-03b18d85",
+      "createdAt": "2023-08-16T11:06:20.90100285Z",
+      "updatedAt": "0001-01-01T00:00:00Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "deviceName": "Kilobaser",
+      "title": "Oligo 2023-08-16.1",
+      "processIds": [
+        "db284390"
+      ],
+      "processTypes": [
+        "insertPlaceholder"
+      ],
+      "processType": "insertPlaceholder",
+      "cartridgeType": "0",
+      "chipKind": "-1",
+      "startedAt": "2023-08-16T11:06:25.947246507Z",
+      "abortedAt": "2023-08-16T11:06:29.360390626Z",
+      "finishedAt": "2023-08-16T11:06:29.457737347Z",
+      "answers": {},
+      "cartridgeId": "",
+      "duration": 2800,
+      "durations": [
+        2800
+      ],
+      "cartridgeExpiresAt": "0001-01-01T00:00:00Z",
+      "isContinuedRun": false,
+      "isCancelling": true
+    },
+    {
+      "id": "2023-08-14T14:01:33Z-33e11745",
+      "createdAt": "2023-08-16T11:06:04.744695384Z",
+      "updatedAt": "0001-01-01T00:00:00Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "deviceName": "Kilobaser",
+      "title": "Oligo 2023-08-14.2",
+      "processIds": [
+        "db284390"
+      ],
+      "processTypes": [
+        "insertPlaceholder"
+      ],
+      "processType": "insertPlaceholder",
+      "cartridgeType": "0",
+      "chipKind": "-1",
+      "startedAt": "2023-08-16T11:06:16.384003464Z",
+      "abortedAt": "2023-08-16T11:06:20.837786169Z",
+      "finishedAt": "2023-08-16T11:06:20.956419779Z",
+      "answers": {},
+      "cartridgeId": "",
+      "duration": 2800,
+      "durations": [
+        2800
+      ],
+      "cartridgeExpiresAt": "0001-01-01T00:00:00Z",
+      "isContinuedRun": false,
+      "isCancelling": true
+    },
+    {
+      "id": "2023-08-14T12:53:20Z-6295394a",
+      "createdAt": "2023-08-16T10:54:41.229032966Z",
+      "updatedAt": "2023-08-16T11:03:09.085331643Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "deviceName": "Kilobaser",
+      "title": "Oligo 2023-08-14.1",
+      "processIds": [
+        "db284390"
+      ],
+      "processTypes": [
+        "insertPlaceholder"
+      ],
+      "processType": "insertPlaceholder",
+      "cartridgeType": "0",
+      "chipKind": "-1",
+      "startedAt": "2023-08-16T10:56:04.959771351Z",
+      "abortedAt": "2023-08-16T11:00:33.555171887Z",
+      "finishedAt": "2023-08-16T11:03:17.870736062Z",
+      "answers": {},
+      "cartridgeId": "",
+      "duration": 2800,
+      "durations": [
+        2800
+      ],
+      "cartridgeExpiresAt": "0001-01-01T00:00:00Z",
+      "isContinuedRun": false,
+      "isCancelling": true
+    }
+  ],
+  "session": {
+    "id": "d8dd23fc-1e9d-4b1e-9401-260b54b1c9b7",
+    "createdAt": "2023-08-24T08:44:01.093422336Z",
+    "updatedAt": "0001-01-01T00:00:00Z",
+    "deletedAt": "0001-01-01T00:00:00Z",
+    "deviceName": "Kilobaser",
+    "expiresAt": "2023-09-24T08:44:01.093422336Z",
+    "user": {
+      "id": "test",
+      "createdAt": "0001-01-01T00:00:00Z",
+      "updatedAt": "0001-01-01T00:00:00Z",
+      "deletedAt": "0001-01-01T00:00:00Z",
+      "name": "Test",
+      "fullName": "test",
+      "role": "user"
+    }
+  },
+  "errors": [],
+  "settingsUser": {
+    "system": {
+      "model": "",
+      "serialNr": "",
+      "softwareVersion": "",
+      "localization": "",
+      "userTimezone": "Europe/Vienna",
+      "recommendedCartridgeType": "",
+      "recommendedChipKind": ""
+    }
+  },
+  "ccSettings": {
+    "id": "ccSettings",
+    "createdAt": "2023-08-24T09:26:05.277862571Z",
+    "updatedAt": "0001-01-01T00:00:00Z",
+    "deletedAt": "0001-01-01T00:00:00Z",
+    "deviceName": "Kilobaser",
+    "chips": {
+      "-1": {
+        "chipKind": "-1",
+        "name": "Ignore Chip",
+        "color": "",
+        "colorCode": "",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "-100": {
+        "chipKind": "-100",
+        "name": "No Sensor",
+        "color": "",
+        "colorCode": "",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "-2": {
+        "chipKind": "-2",
+        "name": "Any Chip",
+        "color": "",
+        "colorCode": "",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "-98": {
+        "chipKind": "-98",
+        "name": "Detected Error",
+        "color": "detectionerror",
+        "colorCode": "",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "-99": {
+        "chipKind": "-99",
+        "name": "Internal Error",
+        "color": "",
+        "colorCode": "",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "0": {
+        "chipKind": "0",
+        "name": "No Chip",
+        "color": "no_chip",
+        "colorCode": "",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "1": {
+        "chipKind": "1",
+        "name": "Placeholder",
+        "color": "placeholder",
+        "colorCode": "#333333",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "1000": {
+        "chipKind": "1000",
+        "name": "Used",
+        "color": "",
+        "colorCode": "#808080",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "2": {
+        "chipKind": "2",
+        "name": "Standard",
+        "color": "chip_transparent",
+        "colorCode": "#f0f0f0",
+        "outlineCode": "#5c068c",
+        "fixed": true
+      },
+      "3-BHQ1": {
+        "chipKind": "3-BHQ1",
+        "name": "6-FAM+BHQ-1",
+        "color": "chip_lila",
+        "colorCode": "#5c068c",
+        "outlineCode": "",
+        "fixed": true
+      },
+      "3-single-label": {
+        "chipKind": "3-single-label",
+        "name": "6-FAM",
+        "color": "chip_green",
+        "colorCode": "#aadb1e",
+        "outlineCode": "#333333",
+        "fixed": false
+      },
+      "4-P": {
+        "chipKind": "4-P",
+        "name": "Phosphorylation",
+        "color": "chip_blue",
+        "colorCode": "#8BBEE8",
+        "outlineCode": "#333333",
+        "fixed": false
+      },
+      "4-amino": {
+        "chipKind": "4-amino",
+        "name": "Amino Modifier C6",
+        "color": "chip_blue",
+        "colorCode": "#8BBEE8",
+        "outlineCode": "#333333",
+        "fixed": false
+      },
+      "4-biotin": {
+        "chipKind": "4-biotin",
+        "name": "Biotin",
+        "color": "chip_blue",
+        "colorCode": "#8BBEE8",
+        "outlineCode": "#333333",
+        "fixed": false
+      },
+      "4-hexynyl": {
+        "chipKind": "4-hexynyl",
+        "name": "Hexynyl",
+        "color": "chip_blue",
+        "colorCode": "#8BBEE8",
+        "outlineCode": "#333333",
+        "fixed": false
+      },
+      "98": {
+        "chipKind": "98",
+        "name": "Cleaning",
+        "color": "chip_transparent",
+        "colorCode": "#f0f0f0",
+        "outlineCode": "#5c068c",
+        "fixed": true
+      },
+      "99": {
+        "chipKind": "99",
+        "name": "Setup",
+        "color": "chip_transparent",
+        "colorCode": "#f0f0f0",
+        "outlineCode": "#5c068c",
+        "fixed": true
+      },
+      "99999": {
+        "chipKind": "99999",
+        "name": "Unknown",
+        "color": "",
+        "colorCode": "",
+        "outlineCode": "",
+        "fixed": true
+      }
+    },
+    "cartridges": {
+      "-1": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Ignore Cartridge",
+        "type": "-1",
+        "expiryPeriod": 0,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 0,
+        "baseCount": null,
+        "baseMass": null,
+        "baseOrder": null,
+        "cartridgePriority": 0,
+        "imgText": "",
+        "colorCode": "",
+        "specOpsColor": "",
+        "lostBasesColor": "",
+        "layoutTextColor": "",
+        "layoutHoverColor": "",
+        "imgHoverColor": "",
+        "settingsTextColor": "",
+        "fixed": true
+      },
+      "-2": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Any Cartridge",
+        "type": "-2",
+        "expiryPeriod": 0,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 0,
+        "baseCount": null,
+        "baseMass": null,
+        "baseOrder": null,
+        "cartridgePriority": 0,
+        "imgText": "",
+        "colorCode": "",
+        "specOpsColor": "",
+        "lostBasesColor": "",
+        "layoutTextColor": "",
+        "layoutHoverColor": "",
+        "imgHoverColor": "",
+        "settingsTextColor": "",
+        "fixed": true
+      },
+      "0": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "No Cartridge",
+        "type": "0",
+        "expiryPeriod": 3600000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 0,
+        "baseCount": null,
+        "baseMass": null,
+        "baseOrder": null,
+        "cartridgePriority": 0,
+        "imgText": "",
+        "colorCode": "",
+        "specOpsColor": "",
+        "lostBasesColor": "",
+        "layoutTextColor": "",
+        "layoutHoverColor": "",
+        "imgHoverColor": "",
+        "settingsTextColor": "",
+        "fixed": true
+      },
+      "1": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Manual Cleaning",
+        "type": "1",
+        "expiryPeriod": 0,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 0,
+        "baseCount": null,
+        "baseMass": null,
+        "baseOrder": null,
+        "cartridgePriority": 0,
+        "imgText": "",
+        "colorCode": "",
+        "specOpsColor": "",
+        "lostBasesColor": "",
+        "layoutTextColor": "",
+        "layoutHoverColor": "",
+        "imgHoverColor": "",
+        "settingsTextColor": "",
+        "fixed": true
+      },
+      "11": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Automatic Cleaning",
+        "type": "11",
+        "expiryPeriod": 0,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 0,
+        "baseCount": null,
+        "baseMass": null,
+        "baseOrder": null,
+        "cartridgePriority": 0,
+        "imgText": "CLEANING",
+        "colorCode": "#dde5ed",
+        "specOpsColor": "",
+        "lostBasesColor": "",
+        "layoutTextColor": "",
+        "layoutHoverColor": "",
+        "imgHoverColor": "",
+        "settingsTextColor": "",
+        "fixed": true
+      },
+      "2": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Standard Cartridge",
+        "type": "2",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 150,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "T": 75
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 304.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T"
+        ],
+        "cartridgePriority": 0,
+        "imgText": "STANDARD",
+        "colorCode": "#5c068c",
+        "specOpsColor": "#eee6f3",
+        "lostBasesColor": "#ffffff",
+        "layoutTextColor": "#ffffff",
+        "layoutHoverColor": "#2e0346",
+        "imgHoverColor": "#eee6f3",
+        "settingsTextColor": "#ffffff",
+        "fixed": true
+      },
+      "2-QC": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "QC Cartridge",
+        "type": "2-QC",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 100,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "T": 75,
+          "X": 75
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 289.18,
+          "X": 329.21
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T",
+          "X"
+        ],
+        "cartridgePriority": 0,
+        "imgText": "QC",
+        "colorCode": "#FF10F0",
+        "specOpsColor": "#ffc7fc",
+        "lostBasesColor": "#000000",
+        "layoutTextColor": "#000000",
+        "layoutHoverColor": "#FFFFFF",
+        "imgHoverColor": "#ffc7fc",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      },
+      "2-XL": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "XL Standard Cartridge",
+        "type": "2-XL",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 300,
+        "baseCount": {
+          "A": 150,
+          "C": 150,
+          "G": 150,
+          "T": 150
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 304.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T"
+        ],
+        "cartridgePriority": 100,
+        "imgText": "STANDARD",
+        "colorCode": "#5c068c",
+        "specOpsColor": "#eee6f3",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#2e0346",
+        "imgHoverColor": "#eee6f3",
+        "settingsTextColor": "#FFFFFF",
+        "fixed": false
+      },
+      "3": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "6-FAM Cartridge",
+        "type": "3",
+        "expiryPeriod": 604800000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 100,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "T": 75
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 304.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T"
+        ],
+        "cartridgePriority": 1,
+        "imgText": "6-FAM",
+        "colorCode": "#aadb1e",
+        "specOpsColor": "#aadb1e",
+        "lostBasesColor": "#5c068c",
+        "layoutTextColor": "#5c068c",
+        "layoutHoverColor": "#eef8d2",
+        "imgHoverColor": "#eef8d2",
+        "settingsTextColor": "#000000",
+        "fixed": true
+      },
+      "4-P": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Phosphorylation Cartridge",
+        "type": "4-P",
+        "expiryPeriod": 604800000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 100,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "T": 75
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 304.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T"
+        ],
+        "cartridgePriority": 41,
+        "imgText": "Phosphorylation",
+        "colorCode": "#8BBEE8",
+        "specOpsColor": "#8BBEE8",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#d4e7f7",
+        "imgHoverColor": "#d4e7f7",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      },
+      "4-amino": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Amino Modifier C6 Cartridge",
+        "type": "4-amino",
+        "expiryPeriod": 604800000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 100,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "T": 75
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 304.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T"
+        ],
+        "cartridgePriority": 40,
+        "imgText": "Amino Modifier C6",
+        "colorCode": "#8BBEE8",
+        "specOpsColor": "#8BBEE8",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#d4e7f7",
+        "imgHoverColor": "#d4e7f7",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      },
+      "4-biotin": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Biotin Cartridge",
+        "type": "4-biotin",
+        "expiryPeriod": 604800000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 100,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "T": 75
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 304.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T"
+        ],
+        "cartridgePriority": 43,
+        "imgText": "Biotin",
+        "colorCode": "#8BBEE8",
+        "specOpsColor": "#8BBEE8",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#d4e7f7",
+        "imgHoverColor": "#d4e7f7",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      },
+      "4-hexynyl": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "Hexynyl Cartridge",
+        "type": "4-hexynyl",
+        "expiryPeriod": 604800000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 100,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "T": 75
+        },
+        "baseMass": {
+          "A": 313.21,
+          "C": 289.18,
+          "G": 329.21,
+          "T": 304.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "T"
+        ],
+        "cartridgePriority": 44,
+        "imgText": "Click Chemistry",
+        "colorCode": "#8BBEE8",
+        "specOpsColor": "#8BBEE8",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#d4e7f7",
+        "imgHoverColor": "#d4e7f7",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      },
+      "5-F-RNA": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "2'-F-RNA Cartridge",
+        "type": "5-F-RNA",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 150,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "U": 75
+        },
+        "baseMass": {
+          "A": 331.2,
+          "C": 307.18,
+          "G": 347.19,
+          "U": 308.16
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "U"
+        ],
+        "cartridgePriority": 51,
+        "imgText": "2'-F RNA",
+        "colorCode": "#ffb300",
+        "specOpsColor": "#ffb300",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#ffe098",
+        "imgHoverColor": "#ffe098",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      },
+      "5-MOE-RNA": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "2'-MOE-RNA Cartridge",
+        "type": "5-MOE-RNA",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 150,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "U": 75
+        },
+        "baseMass": {
+          "A": 387.29,
+          "C": 377.29,
+          "G": 403.29,
+          "U": 378.27
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "U"
+        ],
+        "cartridgePriority": 50,
+        "imgText": "2'-MOE RNA",
+        "colorCode": "#ffb300",
+        "specOpsColor": "#ffb300",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#ffe098",
+        "imgHoverColor": "#ffe098",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      },
+      "5-OMe-RNA": {
+        "id": "",
+        "createdAt": "0001-01-01T00:00:00Z",
+        "updatedAt": "0001-01-01T00:00:00Z",
+        "deletedAt": "0001-01-01T00:00:00Z",
+        "serialCode": "",
+        "initialized": false,
+        "name": "2'-OMe-RNA Cartridge",
+        "type": "5-OMe-RNA",
+        "expiryPeriod": 1209600000000000,
+        "removedAt": null,
+        "expiresAt": "0001-01-01T00:00:00Z",
+        "activatedFinishedAt": null,
+        "totalBasesCount": 150,
+        "baseCount": {
+          "A": 75,
+          "C": 75,
+          "G": 75,
+          "U": 75
+        },
+        "baseMass": {
+          "A": 343.24,
+          "C": 319.21,
+          "G": 359.24,
+          "U": 320.2
+        },
+        "baseOrder": [
+          "A",
+          "G",
+          "C",
+          "U"
+        ],
+        "cartridgePriority": 52,
+        "imgText": "2'-OMe RNA",
+        "colorCode": "#ffb300",
+        "specOpsColor": "#ffb300",
+        "lostBasesColor": "#FFFFFF",
+        "layoutTextColor": "#FFFFFF",
+        "layoutHoverColor": "#ffe098",
+        "imgHoverColor": "#ffe098",
+        "settingsTextColor": "#000000",
+        "fixed": false
+      }
+    },
+    "operations": {
+      "0": {
+        "1": {
+          "Name": "CartridgeType 2 (Standard) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Activation is on port 6 in same row as bases. Oxidation after column on port 16.",
+          "cartridgeType": "0",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "1000": {
+          "Name": "CartridgeType 2 (Standard) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Activation is on port 6 in same row as bases. Oxidation after column on port 16.",
+          "cartridgeType": "0",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "2": {
+          "Name": "CartridgeType 2 (Standard) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Activation is on port 6 in same row as bases. Oxidation after column on port 16.",
+          "cartridgeType": "2",
+          "chipKind": "2",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        }
+      },
+      "2": {
+        "1": {
+          "Name": "CartridgeType 2 (Standard) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Activation is on port 6 in same row as bases. Oxidation after column on port 16.",
+          "cartridgeType": "2",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "1000": {
+          "Name": "CartridgeType 2 (Standard) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Activation is on port 6 in same row as bases. Oxidation after column on port 16.",
+          "cartridgeType": "2",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "2": {
+          "Name": "CartridgeType 2 (Standard) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Activation is on port 6 in same row as bases. Oxidation after column on port 16.",
+          "cartridgeType": "2",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        }
+      },
+      "2-QC": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "2-QC",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 3
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "2-QC",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 3
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "2-QC",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 3
+        }
+      },
+      "2-XL": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "2-XL",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "2-XL",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "2-XL",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 2
+        }
+      },
+      "3": {
+        "1": {
+          "Name": "CartridgeType 3 (6-FAM) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Acetonitrile is on port 11. Reservoir = Modification (port 1)",
+          "cartridgeType": "3",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 2,
+          "valveMapping": 3
+        },
+        "1000": {
+          "Name": "CartridgeType 3 (6-FAM) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Acetonitrile is on port 11. Reservoir = Modification (port 1)",
+          "cartridgeType": "3",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 2,
+          "valveMapping": 3
+        },
+        "2": {
+          "Name": "CartridgeType 3 (6-FAM) + ChipKind 2 (Standard)",
+          "Description": "Chip of type Chipshop Delta. Acetonitrile is on port 11. Reservoir = Modification (port 1)",
+          "cartridgeType": "3",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 2,
+          "valveMapping": 3
+        },
+        "3-BHQ1": {
+          "Name": "CartridgeType 3 (6-FAM) + ChipKind 3 (BHQ-1)",
+          "Description": "Chip of type Chipshop Delta. Acetonitrile is on port 11. Reservoir = Modification (port 1)",
+          "cartridgeType": "3",
+          "chipKind": "3-BHQ1",
+          "select": true,
+          "sequencePrefix": "FAM-",
+          "sequenceSuffix": "-BHQ-1",
+          "molWeightConst": 1091.95,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 3
+        },
+        "3-single-label": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "3",
+          "chipKind": "3-single-label",
+          "select": true,
+          "sequencePrefix": "FAM-",
+          "sequenceSuffix": "",
+          "molWeightConst": 537.46,
+          "fixed": false,
+          "operationPriority": 1,
+          "valveMapping": 3
+        }
+      },
+      "4-P": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-P",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-P",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-P",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "4-P": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-P",
+          "chipKind": "4-P",
+          "select": true,
+          "sequencePrefix": "P-",
+          "sequenceSuffix": "",
+          "molWeightConst": 79.98,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 3
+        }
+      },
+      "4-amino": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-amino",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-amino",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-amino",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "4-amino": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-amino",
+          "chipKind": "4-amino",
+          "select": true,
+          "sequencePrefix": "Amino-C6-",
+          "sequenceSuffix": "",
+          "molWeightConst": 179.15,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 3
+        }
+      },
+      "4-biotin": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-biotin",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-biotin",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-biotin",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "4-biotin": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-biotin",
+          "chipKind": "4-biotin",
+          "select": true,
+          "sequencePrefix": "Biotin-",
+          "sequenceSuffix": "",
+          "molWeightConst": 405.45,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 3
+        }
+      },
+      "4-hexynyl": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-hexynyl",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-hexynyl",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-hexynyl",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 1,
+          "valveMapping": 3
+        },
+        "4-hexynyl": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "4-hexynyl",
+          "chipKind": "4-hexynyl",
+          "select": true,
+          "sequencePrefix": "Hexynyl-",
+          "sequenceSuffix": "",
+          "molWeightConst": 160.11,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 3
+        }
+      },
+      "5-F-RNA": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-F-RNA",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-F-RNA",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-F-RNA",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 2
+        }
+      },
+      "5-MOE-RNA": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-MOE-RNA",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-MOE-RNA",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-MOE-RNA",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 2
+        }
+      },
+      "5-OMe-RNA": {
+        "1": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-OMe-RNA",
+          "chipKind": "1",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "1000": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-OMe-RNA",
+          "chipKind": "1000",
+          "select": false,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": true,
+          "operationPriority": 0,
+          "valveMapping": 2
+        },
+        "2": {
+          "Name": "",
+          "Description": "",
+          "cartridgeType": "5-OMe-RNA",
+          "chipKind": "2",
+          "select": true,
+          "sequencePrefix": "",
+          "sequenceSuffix": "",
+          "molWeightConst": 0,
+          "fixed": false,
+          "operationPriority": 0,
+          "valveMapping": 2
+        }
+      }
+    },
+    "chipColors": [
+      "no_chip",
+      "placeholder",
+      "detectionerror",
+      "chip_transparent",
+      "chip_green",
+      "chip_red",
+      "chip_blue",
+      "chip_lila",
+      "chip_yellow"
+    ],
+    "valveMappingSelection": [
+      2,
+      3
+    ]
+  },
+  "sensorState": {
+    "chip": false
+  }
+}

@@ -2,20 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:math';
+import 'dart:convert';
 
 late IRestApiClient restApiClient;
 
-Future<Result> simpleCall() async {
+Future<Result> loginCall() async {
 
-  final response = await restApiClient.post(
-    '/Authentication/Authenticate',
-    data: {'username': 'john', 'password': 'Flutter_is_awesome1!'},
+  Result response = await restApiClient.post(
+    '/api/login',
+    data: {'username': 'test', 'password': 'test'},
   );
   
   return response; 
 }
 
+Future<Result> initCall(var sessionID) async {
 
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(
+    headers: {
+      'cookie': 'session='+sessionID,
+    }
+  );
+
+  Result response = await restApiClient.get(
+    '/api/init',
+    options: options,
+  );
+  
+  return response; 
+}
+
+Future<Result> processRunCall(var sessionID, var runID) async {
+
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(
+    headers: {
+      'cookie': 'session='+sessionID,
+    }
+  );
+
+  Result response = await restApiClient.post(
+    '/api/processRuns',
+    options: options,
+    data: { 'id': runID },
+  );
+  
+  return response; 
+}
+
+Future<Result> openLidCall(var sessionID, var runID) async {
+
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(
+    headers: {
+      'cookie': 'session='+sessionID,
+    }
+  );
+
+  var answer = {'lidClosed': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: { 'answers': answer },
+  );
+  
+  return response; 
+}
 
 void main() async {
 
@@ -23,13 +74,13 @@ void main() async {
 
   restApiClient = RestApiClient(
     options: RestApiClientOptions(
-    
       //Defines your base API url eg. https://mybestrestapi.com
+      //baseUrl: 'https://169.254.73.31:443/',
+      baseUrl: 'https://169.254.22.77:443/',
       //baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
-      baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
       //Enable caching of response data
-        cacheEnabled: true,
-      ),
+      cacheEnabled: true,
+    ),
       
     loggingOptions: LoggingOptions(
       //Toggle logging of your requests and responses
@@ -156,16 +207,36 @@ class MyHomePage extends StatelessWidget {
                     child: Text('Encode'),
                   ),
                 ),
-                Padding(
+                Padding (
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton (
-                    onPressed: () {
+                    onPressed: () async {
                       
-                      var response = simpleCall();
+                      Result loginResponse = await loginCall();
+ 
+                      print("finished call");
 
-                      print(response);
+                      var sessionID = loginResponse.data['id'];
+
+                      print(loginResponse.data['id']);
 
                       print('button pressed!');
+
+                      Result initResponse = await initCall(sessionID);
+
+                      var runID  = initResponse.data['processRunQueue'][0]['id'];
+
+                      print(initResponse.data['processRunQueue'][0]['id']);
+
+                      //start process and wait for user interaction
+                      Result runResponse = await processRunCall(sessionID, runID);
+                      
+                      print(runResponse.data);
+
+                      Result openLidResponse = await openLidCall(sessionID, runID);
+
+                      print(openLidResponse.data);
+
                     },
                     child: Text('Synthesise'),
                   ),
