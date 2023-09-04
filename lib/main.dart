@@ -2,18 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:math';
-import 'dart:convert';
+import 'dart:async';
+//import 'dart:convert';
 
 late IRestApiClient restApiClient;
 
-Future<Result> loginCall() async {
+Future<String> loginCall() async {
 
   Result response = await restApiClient.post(
     '/api/login',
     data: {'username': 'test', 'password': 'test'},
   );
   
-  return response; 
+  return response.data['id']; 
+}
+
+Future<String> checkLidState(var sessionID) async {
+
+  Result response = initCall(sessionID) as Result;
+  
+  return response.data['id'];   
+
 }
 
 Future<Result> initCall(var sessionID) async {
@@ -30,6 +39,51 @@ Future<Result> initCall(var sessionID) async {
   );
   
   return response; 
+}
+
+addSynthesis(var sessionID, var sequence) async {
+
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(
+    headers: {
+      'cookie': 'session='+sessionID,
+    }
+  );
+
+  var seq = {'sequence': sequence};
+
+  //check i data has to be map. Also, make more robust through with specific, time based ID for title
+  Result response = await restApiClient.post(
+    '/api/processRuns/queue',
+    options: options,
+    data: {
+      'answers': seq,
+      'cartridgeType': '2',
+      'chipKind': '2',
+      'priority': '0',
+      'processType': 'synthesis',
+      'title': 'test synthesis',
+    },
+  );
+
+/*
+    curl -X 'POST' \
+    --insecure \
+    -b ./kbcookies.txt  \
+    'https://${KILOBASERIP}:8443/api/processRuns/queue' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "answers": {
+        "sequence": "AGCTAGCT"
+      },
+      "cartridgeType": "2",
+      "chipKind": "2",
+      "priority": 0,
+      "processType": "synthesis",
+      "title": "test synthesis"
+    }'
+*/
+
 }
 
 Future<Result> processRunCall(var sessionID, var runID) async {
@@ -107,7 +161,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'DNA App',
+        title: 'DNA Storage App',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -121,8 +175,84 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+
+  int _state = 0;
+
+  void animateButton() {
+    
+    print("animate button");
+
+    setState(() {
+      _state = 1;
+    });
+
+    Timer(Duration(milliseconds: 3300), () {
+      setState(() {
+        _state = 2;
+      });
+    });
+  }
+
+  Widget setUpButtonChild() {
+    if (_state == 0) {
+      return Text(
+        "Click Here",
+      );
+    } else if (_state == 1) {
+      return CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      );
+    } else {
+      return Icon(Icons.check);
+    }
+  }
+
+  void _showDialog(BuildContext context) {
+  showDialog(
+  context: context,
+  builder: (context) {
+    String contentText = "Content of Dialog";
+    String titleText  = "Writing Data";
+    String buttonText = "Open Lid";
+
+    AlertDialog dialog = AlertDialog (
+          title: Text(titleText),
+          content: Text(contentText),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              //this should lead to all state being removed, i.e., the queue cleared etc.
+              child: Text("Abort"),
+            ),
+            MaterialButton (
+              onPressed: () {
+                setState(() {
+                  if (_state == 0) {
+                    animateButton();
+                  }
+                });
+              },
+              child: setUpButtonChild(),
+          
+            ),
+          ],
+        );
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return dialog;
+      },
+    );
+  },
+);
+}
+
   Widget build(BuildContext context) {
     TextEditingController input = TextEditingController();
     TextEditingController dna = TextEditingController();
@@ -211,7 +341,10 @@ class MyHomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton (
                     onPressed: () async {
-                      
+
+                      _showDialog(context);
+
+                      /*
                       Result loginResponse = await loginCall();
  
                       print("finished call");
@@ -236,7 +369,7 @@ class MyHomePage extends StatelessWidget {
                       Result openLidResponse = await openLidCall(sessionID, runID);
 
                       print(openLidResponse.data);
-
+                      */
                     },
                     child: Text('Synthesise'),
                   ),
@@ -247,5 +380,10 @@ class MyHomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  State<StatefulWidget> createState() {
+    
+    throw UnimplementedError();
   }
 }
