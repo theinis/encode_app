@@ -194,6 +194,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     Timer(Duration(milliseconds: 3300), () {
       setState(() {
+        print('state changed');
         _state = 2;
       });
     });
