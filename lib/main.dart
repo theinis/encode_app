@@ -170,7 +170,32 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
-        home: MyHomePage(),
+        home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: "Write"),
+                Tab(text: "Read"),
+                Tab(text: "Debug"),
+              ],
+            ),
+            title: const Text('DNA Storage App'),
+          ),
+          body: TabBarView(
+            children: [
+              MyHomePage(),
+              Icon(Icons.directions_car),
+              Icon(Icons.directions_bike),
+            ],
+          ),
+        ),
+      ),
+        
+        
+        
+        //,
       ),
     );
   }
