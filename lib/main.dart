@@ -3,66 +3,60 @@ import 'package:provider/provider.dart';
 import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:math';
 import 'dart:async';
+
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 //import 'dart:convert';
 
 late IRestApiClient restApiClient;
 
 Future<String> loginCall() async {
-
   Result response = await restApiClient.post(
     '/api/login',
     data: {'username': 'test', 'password': 'test'},
   );
-  
-  return response.data['id']; 
+
+  return response.data['id'];
 }
 
 Future<String> checkLidState(var sessionID) async {
-
   Result response = initCall(sessionID) as Result;
-  
-  return response.data['id'];   
 
+  return response.data['id'];
 }
 
 Future<Result> initCall(var sessionID) async {
-
-  RestApiClientRequestOptions options = RestApiClientRequestOptions(
-    headers: {
-      'cookie': 'session='+sessionID,
-    }
-  );
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
 
   Result response = await restApiClient.get(
     '/api/init',
     options: options,
   );
-  
-  return response; 
+
+  return response;
 }
 
 addSynthesis(var sessionID, var sequence) async {
-
-  RestApiClientRequestOptions options = RestApiClientRequestOptions(
-    headers: {
-      'cookie': 'session='+sessionID,
-    }
-  );
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
 
   var seq = {'sequence': sequence};
+  var data = {
+      "answers": seq,
+      "cartridgeType": "2",
+      "chipKind": "2",
+      "priority": 0,
+      "processType": "synthesis",
+      "title": "test synthesis"
+  };
 
-  //check i data has to be map. Also, make more robust through with specific, time based ID for title
+  //make more robust with specific, time based ID for title
   Result response = await restApiClient.post(
     '/api/processRuns/queue',
     options: options,
-    data: {
-      'answers': seq,
-      'cartridgeType': '2',
-      'chipKind': '2',
-      'priority': '0',
-      'processType': 'synthesis',
-      'title': 'test synthesis',
-    },
+    data: data,
   );
 
 /*
@@ -83,59 +77,67 @@ addSynthesis(var sessionID, var sequence) async {
       "title": "test synthesis"
     }'
 */
-
 }
 
 Future<Result> processRunCall(var sessionID, var runID) async {
-
-  RestApiClientRequestOptions options = RestApiClientRequestOptions(
-    headers: {
-      'cookie': 'session='+sessionID,
-    }
-  );
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
 
   Result response = await restApiClient.post(
     '/api/processRuns',
     options: options,
-    data: { 'id': runID },
+    data: {'id': runID},
   );
-  
-  return response; 
+
+  return response;
 }
 
 Future<Result> openLidCall(var sessionID, var runID) async {
-
-  RestApiClientRequestOptions options = RestApiClientRequestOptions(
-    headers: {
-      'cookie': 'session='+sessionID,
-    }
-  );
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
 
   var answer = {'lidClosed': 'true'};
 
   Result response = await restApiClient.put(
     '/api/processRuns/' + runID + '/control',
     options: options,
-    data: { 'answers': answer },
+    data: {'answers': answer},
   );
-  
-  return response; 
+
+  return response;
 }
 
-void main() async {
+Future<Result> cartridgeDownCall(var sessionID, var runID) async {
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
 
+  var answer = {'cartridgeDown': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: {'answers': answer},
+  );
+
+  return response;
+}
+
+
+void main() async {
   await RestApiClient.initFlutter();
 
   restApiClient = RestApiClient(
     options: RestApiClientOptions(
       //Defines your base API url eg. https://mybestrestapi.com
       //baseUrl: 'https://169.254.73.31:443/',
-      baseUrl: 'https://169.254.22.77:443/',
+      baseUrl: 'https://169.254.113.178:443/',
       //baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
       //Enable caching of response data
       cacheEnabled: true,
     ),
-      
     loggingOptions: LoggingOptions(
       //Toggle logging of your requests and responses
       //to the console while debugging
@@ -151,7 +153,9 @@ void main() async {
 
 final Random random = Random();
 
-String generateRandomString(chars, int length) => Iterable.generate(length, (idx) => chars[random.nextInt(chars.length)]).join();
+String generateRandomString(chars, int length) =>
+    Iterable.generate(length, (idx) => chars[random.nextInt(chars.length)])
+        .join();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -172,8 +176,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyAppState extends ChangeNotifier {
-}
+class MyAppState extends ChangeNotifier {}
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -181,78 +184,161 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-
   int _state = 0;
-
-  void animateButton() {
-    
-    print("animate button");
-
-    setState(() {
-      _state = 1;
-    });
-
-    Timer(Duration(milliseconds: 3300), () {
-      setState(() {
-        print('state changed');
-        _state = 2;
-      });
-    });
-  }
 
   Widget setUpButtonChild() {
     if (_state == 0) {
       return Text(
         "Click Here",
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
       );
     } else if (_state == 1) {
       return CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       );
     } else {
-      return Icon(Icons.check);
+      return Icon(Icons.check, color: Colors.white);
     }
   }
 
-  void _showDialog(BuildContext context) {
-  showDialog(
-  context: context,
-  builder: (context) {
-    String contentText = "Content of Dialog";
-    String titleText  = "Writing Data";
-    String buttonText = "Open Lid";
+  void animateButton() {
+    setState(() {
+      _state = 1;
+    });
 
-    AlertDialog dialog = AlertDialog (
+    Timer(Duration(milliseconds: 3300), () {
+      setState(() {
+        _state = 2;
+      });
+    });
+  }
+
+  List<String> buttonTexts = ['Click Here', 'Button Text 2', 'Button Text 3'];
+  int currentTextIndex = 0;
+  bool showIndicator = false;
+
+  Future<void> _doSomething() async {}
+  // void _doSomething() async {
+
+  // }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        String contentText = "Content of Dialog";
+        String titleText = "Writing Data";
+        String buttonText = "Open Lid";
+
+        AlertDialog dialog = AlertDialog(
           title: Text(titleText),
           content: Text(contentText),
           actions: <Widget>[
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              //this should lead to all state being removed, i.e., the queue cleared etc.
-              child: Text("Abort"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  //this should lead to all state being removed, i.e., the queue cleared etc.
+                  child: Text("Abort"),
+                ),
+                StatefulBuilder(builder: (context, StateSetter setStates) {
+                  return InkWell(
+                      onTap: () async {
+                        setStates(() {
+                          showIndicator = true;
+                        });
+
+                        await Future.delayed(Duration(milliseconds: 900));
+
+                        setStates(() {
+                          currentTextIndex =
+                              (currentTextIndex + 1) % buttonTexts.length;
+                          showIndicator = false;
+                        });
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(21)),
+                        child: Center(
+                          child: showIndicator
+                              ? Center(child: 
+                                  SizedBox( width: 15, height: 15, child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                )))
+                              
+                              
+                              : Text(
+                                  buttonTexts[currentTextIndex],
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                        ),
+                      ));
+                }),
+                //  RoundedLoadingButton(
+                //     elevation: 0,
+                //     width: 100,
+                //     color: Colors.blue,
+                //     successColor: Colors.blue,
+                //     successIcon: Icons.check,
+                //     failedIcon: Icons.cottage,
+                //     height: 40,
+                //     borderRadius: 20,
+                //     duration: Duration(milliseconds: 900),
+                // child: Text(buttonTexts[currentTextIndex],
+                //     style: TextStyle(color: Colors.white)),
+                //     controller: _btnController1,
+                //     onPressed: () {
+                //       _doSomething();
+                //       // Navigator.pop(context);
+                //     }),
+                //)
+              ],
             ),
-            MaterialButton (
-              onPressed: () {
-                setState(() {
-                  if (_state == 0) {
-                    animateButton();
-                  }
-                });
-              },
-              child: setUpButtonChild(),
-          
-            ),
+            // PhysicalModel(
+            //   color: Colors.lightGreen,
+            //   borderRadius: BorderRadius.circular(25.0),
+            //   child: MaterialButton(
+            //     onPressed: () {
+            //       setState(() {
+            //         if (_state == 0) {
+            //           print(_state);
+            //           animateButton();
+            //         }
+            //       });
+            //     },
+            //     child: setUpButtonChild(),
+            //   ),
+            // ),
           ],
         );
 
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return dialog;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return dialog;
+          },
+        );
       },
     );
-  },
-);
-}
+  }
+
+  final RoundedLoadingButtonController _btnController1 =
+      RoundedLoadingButtonController();
+
+  @override
+  void initState() {
+    super.initState();
+    _btnController1.stateStream.listen((value) {
+      print(value);
+    });
+  }
 
   Widget build(BuildContext context) {
     TextEditingController input = TextEditingController();
@@ -261,7 +347,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: Text("Encode to DNA & Synthesise"),
-            backgroundColor: Colors.blue,
+        backgroundColor: Colors.blue,
       ),
       body: Center(
         child: Column(
@@ -274,27 +360,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 child: Text(
                   'Input Data',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20),
+                      fontFamily: 'Poppins',
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: TextField(
-                        controller: input,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 4,
-                        decoration: InputDecoration( 
-                           hintText: "Enter Text",
-                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1, color: Colors.blueAccent)
-                           )
-                        ),
-                         
-                     ),
+                controller: input,
+                keyboardType: TextInputType.multiline,
+                maxLines: 4,
+                decoration: InputDecoration(
+                    hintText: "Enter Text",
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 1, color: Colors.blueAccent))),
+              ),
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -303,34 +387,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 child: Text(
                   'Encoded Data',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20),
+                      fontFamily: 'Poppins',
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: TextField(
-                        controller: dna,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 4,
-                        decoration: InputDecoration( 
-                           hintText: "Resulting DNA",
-                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1, color: Colors.blueAccent)
-                           )
-                        ),
-                         
-                     ),
+                controller: dna,
+                keyboardType: TextInputType.multiline,
+                maxLines: 4,
+                decoration: InputDecoration(
+                    hintText: "Resulting DNA",
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 1, color: Colors.blueAccent))),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton (
+                  child: ElevatedButton(
                     onPressed: () {
                       dna.text = generateRandomString('ATCG', 100);
                       print('encode pressed!');
@@ -338,23 +420,24 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     child: Text('Encode'),
                   ),
                 ),
-                Padding (
+                Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton (
-                    onPressed: () {
-
+                  child: ElevatedButton(
+                    onPressed: () async {
                       _showDialog(context);
 
-                      /*
-                      Result loginResponse = await loginCall();
- 
+                      //Result loginResponse = 
+
+                      String sessionID = await loginCall();
+
                       print("finished call");
 
-                      var sessionID = loginResponse.data['id'];
-
-                      print(loginResponse.data['id']);
+                      print(sessionID);
 
                       print('button pressed!');
+
+                      addSynthesis(sessionID, 'TTTTTTTT');
+
 
                       Result initResponse = await initCall(sessionID);
 
@@ -367,10 +450,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       
                       print(runResponse.data);
 
+                      Result cartridgeDownResponse = await cartridgeDownCall(sessionID, runID);
+
+                      print(cartridgeDownResponse.data);
+/*
                       Result openLidResponse = await openLidCall(sessionID, runID);
 
                       print(openLidResponse.data);
-                      */
+*/                      
                     },
                     child: Text('Synthesise'),
                   ),
@@ -384,7 +471,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   State<StatefulWidget> createState() {
-    
     throw UnimplementedError();
   }
 }
