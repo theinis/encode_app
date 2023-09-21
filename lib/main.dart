@@ -3,8 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:math';
 import 'dart:async';
-
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:flutter_client_sse/constants/sse_request_type_enum.dart';
+import 'package:flutter_client_sse/flutter_client_sse.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 //import 'dart:convert';
 
 late IRestApiClient restApiClient;
@@ -109,6 +112,38 @@ Future<Result> openLidCall(var sessionID, var runID) async {
   return response;
 }
 
+Future<Result> placeholderInsertConfirmedCall(var sessionID, var runID) async {
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
+
+  var answer = {'placeholderInsertConfirmed': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: {'answers': answer},
+  );
+
+  return response;
+}
+
+Future<Result> changeCartridgeConfirmCall(var sessionID, var runID) async {
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
+
+  var answer = {'lidClosed': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: {'answers': answer},
+  );
+
+  return response;
+}
+
 Future<Result> cartridgeDownCall(var sessionID, var runID) async {
   RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
     'cookie': 'session=' + sessionID,
@@ -133,7 +168,7 @@ void main() async {
     options: RestApiClientOptions(
       //Defines your base API url eg. https://mybestrestapi.com
       //baseUrl: 'https://169.254.73.31:443/',
-      baseUrl: 'https://169.254.113.178:443/',
+      baseUrl: 'https://169.254.173.112:443/',
       //baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
       //Enable caching of response data
       cacheEnabled: true,
@@ -185,9 +220,9 @@ class MyApp extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              MyHomePage(),
+              EncodingPage(),
               Icon(Icons.directions_car),
-              Icon(Icons.directions_bike),
+              DebugPage(),
             ],
           ),
         ),
@@ -203,12 +238,148 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {}
 
-class MyHomePage extends StatefulWidget {
+class EncodingPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _EncodingPageState createState() => _EncodingPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+class DebugPage extends StatefulWidget {
+  @override
+  _DebugPageState createState() => _DebugPageState();
+}
+
+class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
+  int _state = 0;
+
+  Widget setUpButtonChild() {
+    if (_state == 0) {
+      return Text(
+        "Click Here",
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+      );
+    } else if (_state == 1) {
+      return CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      );
+    } else {
+      return Icon(Icons.check, color: Colors.white);
+    }
+  }
+
+  void animateButton() {
+
+    setState(() {
+      _state = 1;
+    });
+
+    Timer(Duration(milliseconds: 3300), () {
+      setState(() {
+        _state = 2;
+      });
+    });
+  }
+
+  List<String> buttonTexts = ['Click Here', 'Button Text 2', 'Button Text 3'];
+  int currentTextIndex = 0;
+  bool showIndicator = false;
+  
+  final RoundedLoadingButtonController _btnController1 =
+      RoundedLoadingButtonController();
+
+  @override
+  void initState() {
+    super.initState();
+    _btnController1.stateStream.listen((value) {
+      print(value);
+    });
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      //appBar: AppBar(
+      //  title: Text("Encode to DNA & Synthesise"),
+      //  backgroundColor: Colors.blue,
+      //),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+
+                      print('pressed');
+
+                      final Directory directory = await getApplicationDocumentsDirectory();
+                      print(directory.path);
+                      //final File file = File('${directory.path}/my_file.txt');
+                      //await file.writeAsString(text);
+
+                      //Result loginResponse = 
+
+                      String sessionID = await loginCall();
+
+                      print("finished call");
+
+                      print(sessionID);
+
+                      print('button pressed!');
+
+                      addSynthesis(sessionID, 'TTTTTTTT');
+
+                      Result initResponse = await initCall(sessionID);
+
+                      var runID  = initResponse.data['processRunQueue'][0]['id'];
+
+                      print(initResponse.data['processRunQueue'][0]['id']);
+
+                      //start process and wait for user interaction
+                      
+                      Result runResponse = await processRunCall(sessionID, runID);
+              
+                      print(runResponse.data);
+
+                      Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                      print(placeholderInsertConfirmed.data);
+
+                      Result initResponse2 = await initCall(sessionID);
+
+                      print(initResponse2.data);
+
+                      //Result cartridgeDownResponse = await cartridgeDownCall(sessionID, runID);
+
+                      //print(cartridgeDownResponse.data);
+/*
+                      Result openLidResponse = await openLidCall(sessionID, runID);
+
+                      print(openLidResponse.data);
+*/                      
+                    },
+                    child: Text('Do stuff'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  State<StatefulWidget> createState() {
+    throw UnimplementedError();
+  }
+}
+
+class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMixin {
   int _state = 0;
 
   Widget setUpButtonChild() {
@@ -241,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     });
   }
 
-  List<String> buttonTexts = ['Click Here', 'Button Text 2', 'Button Text 3'];
+  List<String> buttonTexts = ['Start', 'Button Text 2', 'Button Text 3'];
   int currentTextIndex = 0;
   bool showIndicator = false;
 
@@ -254,9 +425,27 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     showDialog(
       context: context,
       builder: (context) {
-        String contentText = "Content of Dialog";
+        String contentText = "Make sure chip and cartridge are ready";
         String titleText = "Writing Data";
         String buttonText = "Open Lid";
+
+        SSEClient.subscribeToSSE(
+          method: SSERequestType.POST,
+          url:'http://192.168.1.2:3000/api/activity-stream?historySnapshot=FIVE_MINUTE',
+          header: {
+            "Cookie":'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NDMyMTAyMzEsImV4cCI6MTY0MzgxNTAzMX0.U0aCAM2fKE1OVnGFbgAU_UVBvNwOMMquvPY8QaLD138; Path=/; Expires=Wed, 02 Feb 2022 15:17:11 GMT; HttpOnly; SameSite=Strict',
+            "Accept": "text/event-stream",
+            "Cache-Control": "no-cache",
+          },
+          body: {
+            "name": "Hello",
+            "customerInfo": {"age": 25, "height": 168}
+          }).listen((event) {
+            print('Id: ' + event.id!);
+            print('Event: ' + event.event!);
+            print('Data: ' + event.data!);
+          },
+        );
 
         AlertDialog dialog = AlertDialog(
           title: Text(titleText),
@@ -280,6 +469,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         await Future.delayed(Duration(milliseconds: 900));
 
                         setStates(() {
+                          contentText = "something other";
                           currentTextIndex =
                               (currentTextIndex + 1) % buttonTexts.length;
                           showIndicator = false;
@@ -307,41 +497,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         ),
                       ));
                 }),
-                //  RoundedLoadingButton(
-                //     elevation: 0,
-                //     width: 100,
-                //     color: Colors.blue,
-                //     successColor: Colors.blue,
-                //     successIcon: Icons.check,
-                //     failedIcon: Icons.cottage,
-                //     height: 40,
-                //     borderRadius: 20,
-                //     duration: Duration(milliseconds: 900),
-                // child: Text(buttonTexts[currentTextIndex],
-                //     style: TextStyle(color: Colors.white)),
-                //     controller: _btnController1,
-                //     onPressed: () {
-                //       _doSomething();
-                //       // Navigator.pop(context);
-                //     }),
-                //)
               ],
             ),
-            // PhysicalModel(
-            //   color: Colors.lightGreen,
-            //   borderRadius: BorderRadius.circular(25.0),
-            //   child: MaterialButton(
-            //     onPressed: () {
-            //       setState(() {
-            //         if (_state == 0) {
-            //           print(_state);
-            //           animateButton();
-            //         }
-            //       });
-            //     },
-            //     child: setUpButtonChild(),
-            //   ),
-            // ),
           ],
         );
 
@@ -370,10 +527,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     TextEditingController dna = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Encode to DNA & Synthesise"),
-        backgroundColor: Colors.blue,
-      ),
+      //appBar: AppBar(
+      //  title: Text("Encode to DNA & Synthesise"),
+      //  backgroundColor: Colors.blue,
+      //),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -451,6 +608,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     onPressed: () async {
                       _showDialog(context);
 
+                      print('pressed');
+
+                      final Directory directory = await getApplicationDocumentsDirectory();
+                      print(directory.path);
+                      //final File file = File('${directory.path}/my_file.txt');
+                      //await file.writeAsString(text);
+
                       //Result loginResponse = 
 
                       String sessionID = await loginCall();
@@ -463,7 +627,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
                       addSynthesis(sessionID, 'TTTTTTTT');
 
-
                       Result initResponse = await initCall(sessionID);
 
                       var runID  = initResponse.data['processRunQueue'][0]['id'];
@@ -471,13 +634,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       print(initResponse.data['processRunQueue'][0]['id']);
 
                       //start process and wait for user interaction
-                      Result runResponse = await processRunCall(sessionID, runID);
                       
+                      Result runResponse = await processRunCall(sessionID, runID);
+              
                       print(runResponse.data);
 
-                      Result cartridgeDownResponse = await cartridgeDownCall(sessionID, runID);
+                      Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
 
-                      print(cartridgeDownResponse.data);
+                      print(placeholderInsertConfirmed.data);
+
+                      Result initResponse2 = await initCall(sessionID);
+
+                      print(initResponse2.data);
+
+                      //Result cartridgeDownResponse = await cartridgeDownCall(sessionID, runID);
+
+                      //print(cartridgeDownResponse.data);
 /*
                       Result openLidResponse = await openLidCall(sessionID, runID);
 
