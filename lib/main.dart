@@ -40,7 +40,7 @@ Future<Result> initCall(var sessionID) async {
   return response;
 }
 
-addSynthesis(var sessionID, var sequence) async {
+addSynthesis(var sessionID, var sequence, var name) async {
   RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
     'cookie': 'session=' + sessionID,
   });
@@ -52,7 +52,7 @@ addSynthesis(var sessionID, var sequence) async {
       "chipKind": "2",
       "priority": 0,
       "processType": "synthesis",
-      "title": "test synthesis"
+      "title": name
   };
 
   //make more robust with specific, time based ID for title
@@ -128,6 +128,23 @@ Future<Result> placeholderInsertConfirmedCall(var sessionID, var runID) async {
   return response;
 }
 
+Future<Result> chipInsertConfirmedCall(var sessionID, var runID) async {
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
+
+  var answer = {'chipInsertConfirmed': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: {'answers': answer},
+  );
+
+  return response;
+}
+
+
 Future<Result> changeCartridgeConfirmCall(var sessionID, var runID) async {
   RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
     'cookie': 'session=' + sessionID,
@@ -168,7 +185,7 @@ void main() async {
     options: RestApiClientOptions(
       //Defines your base API url eg. https://mybestrestapi.com
       //baseUrl: 'https://169.254.73.31:443/',
-      baseUrl: 'https://169.254.173.112:443/',
+      baseUrl: 'https://169.254.224.98:443/',
       //baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
       //Enable caching of response data
       cacheEnabled: true,
@@ -227,10 +244,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-        
-        
-        
-        //,
       ),
     );
   }
@@ -282,7 +295,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
     });
   }
 
-  List<String> buttonTexts = ['Click Here', 'Button Text 2', 'Button Text 3'];
+  List<String> buttonTexts = ['Click Here', 'Confirm', 'Button Text 3'];
   int currentTextIndex = 0;
   bool showIndicator = false;
   
@@ -315,15 +328,6 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
                   child: ElevatedButton(
                     onPressed: () async {
 
-                      print('pressed');
-
-                      final Directory directory = await getApplicationDocumentsDirectory();
-                      print(directory.path);
-                      //final File file = File('${directory.path}/my_file.txt');
-                      //await file.writeAsString(text);
-
-                      //Result loginResponse = 
-
                       String sessionID = await loginCall();
 
                       print("finished call");
@@ -332,7 +336,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
 
                       print('button pressed!');
 
-                      addSynthesis(sessionID, 'TTTTTTTT');
+                      addSynthesis(sessionID, 'TTTTTTTT', 'synthesis');
 
                       Result initResponse = await initCall(sessionID);
 
@@ -412,9 +416,11 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
     });
   }
 
-  List<String> buttonTexts = ['Start', 'Button Text 2', 'Button Text 3'];
+  List<String> buttonTexts = ['Start', 'Confirm', 'Confirm', 'Confirm', 'Confirm'];
   int currentTextIndex = 0;
   bool showIndicator = false;
+  late String sessionID;
+  late var runID;
 
   Future<void> _doSomething() async {}
   // void _doSomething() async {
@@ -425,55 +431,208 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
     showDialog(
       context: context,
       builder: (context) {
-        String contentText = "Make sure chip and cartridge are ready";
+        sessionID = '1234567890';
+        runID = '1234567890';
         String titleText = "Writing Data";
-        String buttonText = "Open Lid";
+        String contentText = "Make sure chip and cartridge are ready";
 
-        SSEClient.subscribeToSSE(
-          method: SSERequestType.POST,
-          url:'http://192.168.1.2:3000/api/activity-stream?historySnapshot=FIVE_MINUTE',
-          header: {
-            "Cookie":'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2NDMyMTAyMzEsImV4cCI6MTY0MzgxNTAzMX0.U0aCAM2fKE1OVnGFbgAU_UVBvNwOMMquvPY8QaLD138; Path=/; Expires=Wed, 02 Feb 2022 15:17:11 GMT; HttpOnly; SameSite=Strict',
-            "Accept": "text/event-stream",
-            "Cache-Control": "no-cache",
-          },
-          body: {
-            "name": "Hello",
-            "customerInfo": {"age": 25, "height": 168}
-          }).listen((event) {
-            print('Id: ' + event.id!);
-            print('Event: ' + event.event!);
-            print('Data: ' + event.data!);
-          },
-        );
+        LinearProgressIndicator progressindicator = LinearProgressIndicator(value: 1.0,
+                          backgroundColor: Colors.orangeAccent,
+                          valueColor: AlwaysStoppedAnimation(Colors.blue),
+                          minHeight: 8,
+                        );
 
-        AlertDialog dialog = AlertDialog(
-          title: Text(titleText),
-          content: Text(contentText),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  //this should lead to all state being removed, i.e., the queue cleared etc.
-                  child: Text("Abort"),
+
+        //AlertDialog dialog = 
+        return StatefulBuilder(
+          builder: (context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(titleText),
+              content: SizedBox(
+                height: 100,
+                child: Column(
+                  children: [
+                    Text(contentText),
+                    showIndicator
+                        ? progressindicator
+                        : Text('')
+                  ],
                 ),
-                StatefulBuilder(builder: (context, StateSetter setStates) {
-                  return InkWell(
-                      onTap: () async {
-                        setStates(() {
-                          showIndicator = true;
-                        });
+              ),
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      //this should lead to all state being removed, i.e., the queue cleared etc.
+                      child: Text("Abort"),
+                    ),
+                    StatefulBuilder(builder: (context, StateSetter setStates) {
+                      return InkWell(
+                        onTap: () async {
 
-                        await Future.delayed(Duration(milliseconds: 900));
+                          if (currentTextIndex == 0) {
 
-                        setStates(() {
-                          contentText = "something other";
-                          currentTextIndex =
-                              (currentTextIndex + 1) % buttonTexts.length;
-                          showIndicator = false;
-                        });
+                            Result runResponse = await processRunCall(sessionID, runID);
+              
+                            print(runResponse.data);
+
+                            Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                            print(placeholderInsertConfirmed.data);
+                            
+                            //won't update content text if not present
+                            setState(() {});
+
+                            setStates(() {
+                              contentText = "Opening lid...";
+                              showIndicator = true;
+                            });
+
+                            while(true) {
+                              Result initResponse = await initCall(sessionID);
+
+                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'chipInsertConfirmed') {
+                                print(currentTextIndex);
+                                break;
+                              }
+
+                              await Future.delayed(Duration(milliseconds: 2000));
+                            }
+
+                            setState(() {});
+
+                            setStates(() {
+                              contentText = "Please make sure chip and vial are inserted";
+                              currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
+                              showIndicator = false;
+                            });
+                          } else if (currentTextIndex == 1) {
+
+                            Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+
+                            print(chipInsertConfirmed.data);
+
+                            //synthesis start
+                            setState(() {});
+
+                            setStates(() {
+                              contentText = "Synthesising";
+                              showIndicator = true;
+                            });
+
+                            bool firstime = true;
+                            int totaltime = 0;
+
+                            while(true) {
+                              Result initResponse = await initCall(sessionID);
+
+                              String status = initResponse.data['status']['currentState']['mode'];
+
+                              if(status == 'working' || status == 'synthesis' || status == 'cleaving' || status == 'drying') {
+                                
+                                double rtdouble = initResponse.data['status']['currentRemainingTime']/1000/60;
+
+                                int remainingtime = rtdouble.floor();
+
+                                if(firstime) {
+                                  totaltime = remainingtime;
+                                  firstime = false;
+                                }
+
+                                setState(() {});
+
+                                String rt = remainingtime.toString();
+
+                                setStates(() {
+                                  //progressindicator!.value=0.0;
+                                  print("Synthesising - $rt minutes to go");
+                                  contentText = "Synthesising - $rt minutes to go";
+                                  //showIndicator = true;
+                                });
+
+                              } else { break; }
+                              
+                              await Future.delayed(Duration(milliseconds: 30000));
+                            }
+
+                            setState(() {});
+
+                            setStates(() {
+                              contentText = "Synthesis done";
+                              showIndicator = false;
+                            });
+
+                            while(true) {
+                              Result initResponse = await initCall(sessionID);
+
+                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'confirmEndProcess') {
+                                break;
+                              }
+
+                              await Future.delayed(Duration(milliseconds: 2000));
+                            }
+
+                            while(true) {
+                              Result initResponse = await initCall(sessionID);
+
+                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'confirmEndProcess') {
+                                break;
+                              }
+
+                              await Future.delayed(Duration(milliseconds: 2000));
+                            }
+
+                            setStates(() {
+                              contentText = "Finish up and open lid";
+                              currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
+                            });
+
+                          } else if (currentTextIndex == 2) {
+
+                            Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                            print(placeholderInsertConfirmed.data);
+                            
+                            //won't update content text if not present
+                            setState(() {});
+
+                            setStates(() {
+                              contentText = "Opening lid...";
+                              showIndicator = true;
+                            });
+
+                            while(true) {
+                              Result initResponse = await initCall(sessionID);
+
+                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'chipInsertConfirmed') {
+                                print(currentTextIndex);
+                                break;
+                              }
+
+                              await Future.delayed(Duration(milliseconds: 2000));
+                            }
+
+                            setState(() {});
+
+                            setStates(() {
+                              contentText = "Please remove vial and replace chip with placeholder";
+                              currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
+                              showIndicator = false;
+                            });
+
+                          } else if (currentTextIndex == 2) {
+
+                            Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+
+                            setStates(() {
+                              contentText = "Closing lid...";
+                              currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
+                              showIndicator = false;
+                            });
+
+                          }
                       },
                       child: Container(
                         width: 100,
@@ -488,8 +647,6 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       Colors.white),
                                 )))
-                              
-                              
                               : Text(
                                   buttonTexts[currentTextIndex],
                                   style: TextStyle(color: Colors.white),
@@ -501,10 +658,6 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
             ),
           ],
         );
-
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return dialog;
           },
         );
       },
@@ -596,7 +749,7 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      dna.text = generateRandomString('ATCG', 100);
+                      dna.text = generateRandomString('ATCG', 70);
                       print('encode pressed!');
                     },
                     child: Text('Encode'),
@@ -608,53 +761,16 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                     onPressed: () async {
                       _showDialog(context);
 
-                      print('pressed');
+                      sessionID = await loginCall();
 
-                      final Directory directory = await getApplicationDocumentsDirectory();
-                      print(directory.path);
-                      //final File file = File('${directory.path}/my_file.txt');
-                      //await file.writeAsString(text);
+                      final String synthesisName = DateTime.now().toString();
 
-                      //Result loginResponse = 
-
-                      String sessionID = await loginCall();
-
-                      print("finished call");
-
-                      print(sessionID);
-
-                      print('button pressed!');
-
-                      addSynthesis(sessionID, 'TTTTTTTT');
+                      addSynthesis(sessionID, 'ATCGATCG', synthesisName);
 
                       Result initResponse = await initCall(sessionID);
 
-                      var runID  = initResponse.data['processRunQueue'][0]['id'];
-
-                      print(initResponse.data['processRunQueue'][0]['id']);
-
-                      //start process and wait for user interaction
-                      
-                      Result runResponse = await processRunCall(sessionID, runID);
-              
-                      print(runResponse.data);
-
-                      Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
-
-                      print(placeholderInsertConfirmed.data);
-
-                      Result initResponse2 = await initCall(sessionID);
-
-                      print(initResponse2.data);
-
-                      //Result cartridgeDownResponse = await cartridgeDownCall(sessionID, runID);
-
-                      //print(cartridgeDownResponse.data);
-/*
-                      Result openLidResponse = await openLidCall(sessionID, runID);
-
-                      print(openLidResponse.data);
-*/                      
+                      runID  = initResponse.data['processRunQueue'][0]['id'];
+  
                     },
                     child: Text('Synthesise'),
                   ),
