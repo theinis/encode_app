@@ -112,6 +112,22 @@ Future<Result> openLidCall(var sessionID, var runID) async {
   return response;
 }
 
+Future<Result> confirmEndProcessCall(var sessionID, var runID) async {
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
+
+  var answer = {'confirmEndProcess': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: {'answers': answer},
+  );
+
+  return response;
+}
+
 Future<Result> placeholderInsertConfirmedCall(var sessionID, var runID) async {
   RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
     'cookie': 'session=' + sessionID,
@@ -177,7 +193,6 @@ Future<Result> cartridgeDownCall(var sessionID, var runID) async {
   return response;
 }
 
-
 void main() async {
   await RestApiClient.initFlutter();
 
@@ -185,7 +200,7 @@ void main() async {
     options: RestApiClientOptions(
       //Defines your base API url eg. https://mybestrestapi.com
       //baseUrl: 'https://169.254.73.31:443/',
-      baseUrl: 'https://169.254.224.98:443/',
+      baseUrl: 'https://169.254.57.42:443/',
       //baseUrl: 'https://enmj2r4tawo3p.x.pipedream.net:443/',
       //Enable caching of response data
       cacheEnabled: true,
@@ -449,10 +464,13 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
             return AlertDialog(
               title: Text(titleText),
               content: SizedBox(
-                height: 100,
+                height: 50,
                 child: Column(
                   children: [
                     Text(contentText),
+                    showIndicator
+                      ? SizedBox(height: 10)
+                      : SizedBox(height: 1),
                     showIndicator
                         ? progressindicator
                         : Text('')
@@ -471,6 +489,8 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                     StatefulBuilder(builder: (context, StateSetter setStates) {
                       return InkWell(
                         onTap: () async {
+
+                          print("Pressed with currentTextIndex is $currentTextIndex");
 
                           if (currentTextIndex == 0) {
 
@@ -564,37 +584,24 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                               showIndicator = false;
                             });
 
-                            while(true) {
-                              Result initResponse = await initCall(sessionID);
-
-                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'confirmEndProcess') {
-                                break;
-                              }
-
-                              await Future.delayed(Duration(milliseconds: 2000));
-                            }
-
-                            while(true) {
-                              Result initResponse = await initCall(sessionID);
-
-                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'confirmEndProcess') {
-                                break;
-                              }
-
-                              await Future.delayed(Duration(milliseconds: 2000));
-                            }
-
                             setStates(() {
-                              contentText = "Finish up and open lid";
                               currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
                             });
 
                           } else if (currentTextIndex == 2) {
 
+                            Result confirmEndProcessCallResult = await confirmEndProcessCall(sessionID, runID);
+
+                            print(confirmEndProcessCallResult.data);
+
                             Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
 
                             print(placeholderInsertConfirmed.data);
                             
+                            Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                            print(placeholderInsertConfirmed2.data);
+
                             //won't update content text if not present
                             setState(() {});
 
@@ -604,14 +611,23 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                             });
 
                             while(true) {
-                              Result initResponse = await initCall(sessionID);
+                              Result initResponse2 = await initCall(sessionID);
 
-                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'chipInsertConfirmed') {
+                              print("Opening lid...");
+
+                              if(initResponse2.data['status']['pendingAnswers'] != null) {
+                                print(initResponse2.data['status']['pendingAnswers']);
+                              } else {
+                                print("no pending answers");
+                                break;
+                              }
+
+                              if(initResponse2.data['status']['pendingAnswers'] != null && initResponse2.data['status']['pendingAnswers'][0] == 'chipInsertConfirmed') {
                                 print(currentTextIndex);
                                 break;
                               }
 
-                              await Future.delayed(Duration(milliseconds: 2000));
+                              await Future.delayed(Duration(milliseconds: 1000));
                             }
 
                             setState(() {});
@@ -624,13 +640,21 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                           } else if (currentTextIndex == 2) {
 
-                            Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+                            //Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+
+                            Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                            print(placeholderInsertConfirmed2.data);
 
                             setStates(() {
                               contentText = "Closing lid...";
                               currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
                               showIndicator = false;
                             });
+
+                          } else {
+
+                            print("Undefined currentTextIndex with $currentTextIndex");
 
                           }
                       },
