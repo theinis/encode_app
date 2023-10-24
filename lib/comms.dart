@@ -3,6 +3,17 @@ import 'package:rest_api_client/rest_api_client.dart';
 late IRestApiClient restApiClient;
 
 
+Future<bool> isLidMoving(var sessionID) async {
+
+  Result response = initCall(sessionID) as Result;
+
+  if(response.data['status']['currentState']['lidPosition'] != null && response.data['status']['currentState']['lidPosition'] == 'moving') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 initialiseComms() async {
 
   await RestApiClient.initFlutter();
