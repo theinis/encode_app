@@ -127,14 +127,20 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                             });
 
                             while(true) {
-                              Result initResponse = await initCall(sessionID);
+                              
+                              await Future.delayed(Duration(milliseconds: 2000));
 
-                              if(initResponse.data['status']['pendingAnswers'] != null && initResponse.data['status']['pendingAnswers'][0] == 'chipInsertConfirmed') {
-                                print(currentTextIndex);
+                              if(!await isLidMoving(sessionID)) {
                                 break;
                               }
 
-                              await Future.delayed(Duration(milliseconds: 2000));
+                              print("DEBUG - lid opening...");
+                            }
+
+                            if(await isLidOpen(sessionID)) {
+                              print("DEBUG - Lid is open");
+                            } else {
+                              //undefined state
                             }
 
                             setState(() {});
@@ -212,37 +218,11 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                             print("DEBUG - currentTextIndex is $currentTextIndex");
 
-                            print("DEBUG - end of process, send commands");
-
-                            print("DEBUG before 4 =================================");
-                            Result initResponse4 = await initCall(sessionID);
-
-                            if(initResponse4.data['status']['pendingAnswers'] != null) {
-                              print("DEBUG");
-                              print(initResponse4.data['status']['pendingAnswers'].toString());
-                            }
-
                             Result confirmEndProcessCallResult = await confirmEndProcessCall(sessionID, runID);
-
-                            print("DEBUG before 5 =================================");
-                            Result initResponse5 = await initCall(sessionID);
-
-                            if(initResponse5.data['status']['pendingAnswers'] != null) {
-                              print("DEBUG");
-                              print(initResponse5.data['status']['pendingAnswers'].toString());
-                            }
 
                             //print(confirmEndProcessCallResult.data);
 
                             Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
-
-                            print("DEBUG before 6 =================================");
-                            Result initResponse6 = await initCall(sessionID);
-
-                            if(initResponse6.data['status']['pendingAnswers'] != null) {
-                              print("DEBUG");
-                              print(initResponse6.data['status']['pendingAnswers']);
-                            }
 
                             //print(placeholderInsertConfirmed.data);
                             
@@ -260,25 +240,16 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                               showIndicator = true;
                             });
 
+
                             while(true) {
-                              Result initResponse2 = await initCall(sessionID);
+                              
+                              await Future.delayed(Duration(milliseconds: 2000));
 
-                              print("DEBUG - Opening lid...");
-
-                              //XXXX: this always breaks and so pops out instantly as there are no pending answers
-
-                              if(initResponse2.data['status']['pendingAnswers'] != null) {
-                                print(initResponse2.data['status']['pendingAnswers']);
-                              } else {
-                                print("DEBUG - no pending answers");
-                              }
-
-                              if(initResponse2.data['status']['pendingAnswers'] != null && initResponse2.data['status']['pendingAnswers'][0] == 'chipInsertConfirmed') {
-                                print(currentTextIndex);
+                              if(!await isLidMoving(sessionID)) {
                                 break;
                               }
 
-                              await Future.delayed(Duration(milliseconds: 2000));
+                              print("DEBUG - lid opening...");
                             }
 
                             setState(() {});
@@ -305,30 +276,22 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                             setStates(() {
                               contentText = "Closing lid...";
-                              print("DEBUG - increment 4");
                               currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
-                              showIndicator = false;
+                              showIndicator = true;
                             });
 
-
                             while(true) {
-                              Result initResponse2 = await initCall(sessionID);
+                              
+                              await Future.delayed(Duration(milliseconds: 2000));
 
-                              print("DEBUG - Closing lid...");
-
-                              if(initResponse2.data['status']['pendingAnswers'] != null) {
-                                print(initResponse2.data['status']['pendingAnswers']);
-                              } else {
-                                print("DEBUG - no pending answers");
-                              }
-
-                              if(initResponse2.data['status']['pendingAnswers'] != null && initResponse2.data['status']['pendingAnswers'][0] == 'chipInsertConfirmed') {
-                                print(currentTextIndex);
+                              if(!await isLidMoving(sessionID)) {
                                 break;
                               }
 
-                              await Future.delayed(Duration(milliseconds: 2000));
+                              print("DEBUG - lid closing...");
                             }
+
+                            Navigator.pop(context);
 
                           } else {
 

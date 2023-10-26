@@ -5,7 +5,7 @@ late IRestApiClient restApiClient;
 
 Future<bool> isLidMoving(var sessionID) async {
 
-  Result response = initCall(sessionID) as Result;
+  Result response = await initCall(sessionID);
 
   if(response.data['status']['currentState']['lidPosition'] != null && response.data['status']['currentState']['lidPosition'] == 'moving') {
     return true;
@@ -14,13 +14,38 @@ Future<bool> isLidMoving(var sessionID) async {
   }
 }
 
+
+Future<bool> isLidClosed(var sessionID) async {
+
+  Result response = await initCall(sessionID);
+
+  if(response.data['status']['currentState']['lidPosition'] != null && response.data['status']['currentState']['lidPosition'] == 'closed') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+Future<bool> isLidOpen(var sessionID) async {
+
+  Result response = await initCall(sessionID);
+
+  if(response.data['status']['currentState']['lidPosition'] != null && response.data['status']['currentState']['lidPosition'] == 'open') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
 initialiseComms() async {
 
   await RestApiClient.initFlutter();
 
   restApiClient = RestApiClient(
     options: RestApiClientOptions(
-      baseUrl: 'https://169.254.240.205:443/',
+      baseUrl: 'https://169.254.39.240:443/',
       //Enable caching of response data
       cacheEnabled: true,
     ),
