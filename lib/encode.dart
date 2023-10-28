@@ -71,8 +71,6 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                           minHeight: 8,
                         );
 
-
-        //AlertDialog dialog = 
         return StatefulBuilder(
           builder: (context, StateSetter setState) {
             return AlertDialog(
@@ -107,6 +105,18 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                           print("Pressed with currentTextIndex is $currentTextIndex");
 
                           if (currentTextIndex == 0) {
+
+                            sessionID = await loginCall();
+
+                            final String synthesisName = DateTime.now().toString();
+
+                            addSynthesis(sessionID, 'ATCGATCG', synthesisName);
+
+                            Result initResponse = await initCall(sessionID);
+
+                            runID  = initResponse.data['processRunQueue'][0]['id'];
+
+                            print("DEBUG - Init done");
 
                             print("DEBUG - currentTextIndex is $currentTextIndex");
 
@@ -426,17 +436,6 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                     onPressed: () async {
                       _showDialog(context);
 
-                      sessionID = await loginCall();
-
-                      final String synthesisName = DateTime.now().toString();
-
-                      addSynthesis(sessionID, 'ATCGATCG', synthesisName);
-
-                      Result initResponse = await initCall(sessionID);
-
-                      runID  = initResponse.data['processRunQueue'][0]['id'];
-
-                      print("DEBUG - Init done");
                       //XXX: this is where the START button should be enabled when done
                     },
                     child: Text('Synthesise'),
