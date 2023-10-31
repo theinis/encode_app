@@ -119,6 +119,12 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                             print(initResponse.data['processRunQueue']);
 
+                            while(initResponse.data['processRunQueue'].length == 0) {
+                              await Future.delayed(Duration(milliseconds: 500));
+                              initResponse = await initCall(sessionID);
+                              print("waiting");
+                            } 
+
                             runID  = initResponse.data['processRunQueue'][0]['id'];
 
                             print("DEBUG - Init done");
