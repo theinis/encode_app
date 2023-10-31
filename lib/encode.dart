@@ -6,6 +6,7 @@ import 'comms.dart';
 import 'dart:math';
 
 final Random random = Random();
+TextEditingController dna = TextEditingController();
 
 String generateRandomString(chars, int length) =>
     Iterable.generate(length, (idx) => chars[random.nextInt(chars.length)])
@@ -108,11 +109,15 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                             sessionID = await loginCall();
 
+                            print(sessionID);
+
                             final String synthesisName = DateTime.now().toString();
 
-                            addSynthesis(sessionID, 'ATCGATCG', synthesisName);
+                            addSynthesis(sessionID, dna.text, synthesisName);
 
                             Result initResponse = await initCall(sessionID);
+
+                            print(initResponse.data['processRunQueue']);
 
                             runID  = initResponse.data['processRunQueue'][0]['id'];
 
@@ -352,7 +357,6 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
   Widget build(BuildContext context) {
     TextEditingController input = TextEditingController();
-    TextEditingController dna = TextEditingController();
 
     return Scaffold(
       //appBar: AppBar(
@@ -424,7 +428,7 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      dna.text = generateRandomString('ATCG', 70);
+                      dna.text = generateRandomString('ATCG', 140);
                       print('encode pressed!');
                     },
                     child: Text('Encode'),

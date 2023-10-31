@@ -7,8 +7,6 @@ import 'encode.dart';
 
 //import 'dart:convert';
 
-
-
 void main() async {
 
   await initialiseComms();
