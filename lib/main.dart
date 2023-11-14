@@ -4,10 +4,18 @@ import 'package:provider/provider.dart';
 
 import 'debug.dart';
 import 'encode.dart';
+import 'read.dart';
 
 //import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
+
+  //FlutterSecureStorage storage = FlutterSecureStorage();
+
+  //WidgetsFlutterBinding.ensureInitialized();
+
+  //await storage.deleteAll();
 
   await initialiseComms();
 
@@ -43,7 +51,7 @@ class MyApp extends StatelessWidget {
           body: TabBarView(
             children: [
               EncodingPage(),
-              Icon(Icons.directions_car),
+              ReadingPage(),
               DebugPage(),
             ],
           ),

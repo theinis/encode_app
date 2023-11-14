@@ -3,6 +3,54 @@ import 'package:rest_api_client/rest_api_client.dart';
 late IRestApiClient restApiClient;
 
 
+initiateCartridgeChange(var sessionID) async {
+
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
+
+  var data = {
+      "cartridgeType": "2",
+      "chipKind": "1",
+      "processType": "cartridgeUp",
+  };
+
+  //make more robust with specific, time based ID for title
+  Result response = await restApiClient.post(
+    '/api/processRuns/queue',
+    options: options,
+    data: data,
+  );
+}
+
+
+Future<bool> isAnswerPending(var sessionID) async {
+
+  Result response = await initCall(sessionID);
+
+  if(response.data['status']['pendingAnswers'] != null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+Future<bool> isCartridgePositionClosed(var sessionID) async {
+
+  //as opposed to moving
+
+  Result response = await initCall(sessionID);
+
+  if(response.data['status']['currentState']['cartridgePosition'] != null && response.data['status']['currentState']['cartridgePosition'] == 'closed') {
+    return true;
+  } else {
+    return false;
+  } 
+
+}
+
+
 Future<bool> isLidMoving(var sessionID) async {
 
   Result response = await initCall(sessionID);
@@ -11,7 +59,7 @@ Future<bool> isLidMoving(var sessionID) async {
     return true;
   } else {
     return false;
-  }
+  } 
 }
 
 
@@ -45,14 +93,14 @@ initialiseComms() async {
 
   restApiClient = RestApiClient(
     options: RestApiClientOptions(
-      baseUrl: 'https://169.254.42.13:443/',
+      baseUrl: 'https://169.254.172.62:443/',
       //Enable caching of response data
       cacheEnabled: true,
     ),
     loggingOptions: LoggingOptions(
       //Toggle logging of your requests and responses
       //to the console while debugging
-      logNetworkTraffic: false,
+      logNetworkTraffic: true,
     ),
   );
 
@@ -208,6 +256,38 @@ Future<Result> chipInsertConfirmedCall(var sessionID, var runID) async {
   return response;
 }
 
+Future<Result> confirmReadyForCartridgeDownCall(var sessionID, var runID) async {
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
+
+  var answer = {'confirmReadyForCartridgeDown': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: {'answers': answer},
+  );
+
+  return response;
+}
+
+
+Future<Result> cartridgeInsertConfirmedCall(var sessionID, var runID) async {
+  RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {
+    'cookie': 'session=' + sessionID,
+  });
+
+  var answer = {'cartridgeInsertConfirmed': 'true'};
+
+  Result response = await restApiClient.put(
+    '/api/processRuns/' + runID + '/control',
+    options: options,
+    data: {'answers': answer},
+  );
+
+  return response;
+}
 
 Future<Result> changeCartridgeConfirmCall(var sessionID, var runID) async {
   RestApiClientRequestOptions options = RestApiClientRequestOptions(headers: {

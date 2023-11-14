@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'comms.dart';
 import 'dart:math';
+import 'package:file/local.dart';
+import 'package:shell/shell.dart';
 
 final Random random = Random();
 TextEditingController dna = TextEditingController();
@@ -172,13 +174,12 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                               currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
                               showIndicator = false;
                             });
+
                           } else if (currentTextIndex == 1) {
 
                             print("DEBUG - currentTextIndex is $currentTextIndex");
 
                             Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
-
-                            print(chipInsertConfirmed.data);
 
                             //synthesis start
                             setState(() {});
@@ -433,8 +434,9 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       dna.text = generateRandomString('ATCG', 140);
+
                       print('encode pressed!');
                     },
                     child: Text('Encode'),
