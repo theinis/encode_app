@@ -11,12 +11,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
 
-  //FlutterSecureStorage storage = FlutterSecureStorage();
-
-  //WidgetsFlutterBinding.ensureInitialized();
-
-  //await storage.deleteAll();
-
   await initialiseComms();
 
   runApp(MyApp());

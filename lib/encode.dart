@@ -435,7 +435,12 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      dna.text = generateRandomString('ATCG', 140);
+                      //dna.text = generateRandomString('ATCG', 140);
+
+                      var shell = new Shell();
+                      var pwd = await shell.startAndReadAsString('python', arguments: ['c:/users/omers/dnd/encodeData.py', '--stringData', input.text]);
+                      print('cwd: $pwd');
+                      dna.text = pwd;
 
                       print('encode pressed!');
                     },
