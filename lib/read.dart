@@ -253,8 +253,7 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
 
                       var rootPath = Directory('/homes/theinis');
 
-
-                      String path = FilesystemPicker.openDialog(title: 'Choose sequencing run',
+                      String path = await FilesystemPicker.openDialog(title: 'Choose sequencing run',
                         context: context,
                         rootDirectory: rootPath,
                         fsType: FilesystemType.folder,
@@ -262,7 +261,31 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                         showGoUp: false,
                         pickText: 'Pick directory',) as String;
 
-                      print(path);
+                      final client = SSHClient(
+                        await SSHSocket.connect('146.169.21.39', 22),
+                        username: 'theinis',
+                        onPasswordRequest: () => '',
+                      );
+
+                      final sftp = await client.sftp();
+
+                      final items = await sftp.listdir(path);
+
+                      for (var item in items) {
+                        if(item.attr.isFile) {
+                          if (item.filename.toLowerCase().contains("fastq.gz")) {
+                            print(item.filename);
+
+                            final file = await sftp.open(path + Platform.pathSeparator + item.filename);
+                            final content = await file.readBytes();
+                            final f = new File(item.filename);
+                            f.writeAsBytesSync(content);
+                          }
+                        }
+                      }
+
+                      client.close();
+                      await client.done;
 
                     },
                     child: Text('Decode'),

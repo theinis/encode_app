@@ -92,7 +92,6 @@ class FilesystemPicker extends StatefulWidget {
           caseSensitiveFileExtensionComparison:
               caseSensitiveFileExtensionComparison,
           onSelect: (String value) {
-            print("passed value 2 $value");
             Navigator.of(context).pop<String>(value);
           },
           fileTileSelectMode: fileTileSelectMode,
@@ -178,7 +177,6 @@ class FilesystemPicker extends StatefulWidget {
           caseSensitiveFileExtensionComparison:
               caseSensitiveFileExtensionComparison,
           onSelect: (String value) {
-            print("passed value 3 $value");
             Navigator.of(context).pop<String>(value);
           },
           fileTileSelectMode: fileTileSelectMode,
