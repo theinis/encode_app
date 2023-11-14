@@ -138,7 +138,6 @@ class _FilesystemListState extends State<FilesystemList> {
 
     final sftp = await client.sftp();
     final items = await sftp.listdir(_rootDirectory.absolute.path);
-    //final items = await sftp.listdir('/homes/theinis');
 
     for (var item in items) {
         //print(item.filename);

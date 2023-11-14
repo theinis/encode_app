@@ -263,6 +263,7 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                         pickText: 'Pick directory',) as String;
 
                       print(path);
+
                     },
                     child: Text('Decode'),
                   ),
