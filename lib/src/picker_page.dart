@@ -672,7 +672,7 @@ class _FilesystemPickerState extends State<FilesystemPicker> {
                 //(!permissionRequesting && permissionAllowed && isValidDirectory)
                     //? 
                     { print((body as FilesystemList).currentDirectory);
-                    widget.onSelect((body as FilesystemList).currentDirectory.absolute.path);//!.absolute.path) 
+                    widget.onSelect((body as FilesystemList).currentDirectory.path);//!.absolute.path) 
                     }
                     //: null,
           ),
