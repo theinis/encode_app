@@ -93,7 +93,7 @@ initialiseComms() async {
 
   restApiClient = RestApiClient(
     options: RestApiClientOptions(
-      baseUrl: 'https://169.254.172.62:443/',
+      baseUrl: 'https://169.254.196.153:443/',
       //Enable caching of response data
       cacheEnabled: true,
     ),
@@ -151,12 +151,16 @@ addSynthesis(var sessionID, var sequence, var name) async {
       "title": name
   };
 
+  print(data);
+
   //make more robust with specific, time based ID for title
   Result response = await restApiClient.post(
     '/api/processRuns/queue',
     options: options,
     data: data,
   );
+
+  print(response.data);
 
 /*
     curl -X 'POST' \

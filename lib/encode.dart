@@ -111,15 +111,19 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                             sessionID = await loginCall();
 
-                            print(sessionID);
+                            print("sessionID: $sessionID");
+
+                            print(dna.text);
 
                             final String synthesisName = DateTime.now().toString();
 
-                            addSynthesis(sessionID, dna.text, synthesisName);
+                            print("synthesisName: $synthesisName");
+
+                            addSynthesis(sessionID, "AGTGTCTGTGATCGCCACGCCGCTTATCCGCCGCGCACCGGCGTCGAACCTAATAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTG", synthesisName);
 
                             Result initResponse = await initCall(sessionID);
 
-                            print(initResponse.data['processRunQueue']);
+                            print(initResponse.data['processRunQueue'].length);
 
                             while(initResponse.data['processRunQueue'].length == 0) {
                               await Future.delayed(Duration(milliseconds: 500));
