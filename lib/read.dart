@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'filesystem_picker.dart';
-
+import 'package:shell/shell.dart';
 
 import 'dart:io';
 
@@ -251,7 +251,7 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                   child: ElevatedButton(
                     onPressed: () async {
 
-                      var rootPath = Directory('/homes/theinis');
+                      var rootPath = Directory('/home/minit');//'/homes/theinis');
 
                       String path = await FilesystemPicker.openDialog(title: 'Choose sequencing run',
                         context: context,
@@ -262,13 +262,19 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                         pickText: 'Pick directory',) as String;
 
                       final client = SSHClient(
+<<<<<<< HEAD
                         await SSHSocket.connect('146.169.21.39', 22),
                         username: 'theinis',
                         onPasswordRequest: () => 'amb10entIMPERIAL',
+=======
+                        await SSHSocket.connect('169.254.131.51',22),//'146.169.21.39', 22),
+                        username: 'minit',
+                        onPasswordRequest: () => 'minit',
+>>>>>>> ca7ae024bf5752ad2cebf56b37b6c73eef76cd1d
                       );
 
                       final sftp = await client.sftp();
-
+                      print(path);
                       final items = await sftp.listdir(path);
 
                       for (var item in items) {
@@ -276,10 +282,17 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                           if (item.filename.toLowerCase().contains("fastq.gz")) {
                             print(item.filename);
 
-                            final file = await sftp.open(path + Platform.pathSeparator + item.filename);
+                            final file = await sftp.open(path + '/' + item.filename);
                             final content = await file.readBytes();
                             final f = new File(item.filename);
                             f.writeAsBytesSync(content);
+                            var shell = new Shell();
+                            var localPath = await shell.startAndReadAsString('cd');
+                            //print('cwd: $localPath');
+                            var decodingResult = await shell.startAndReadAsString('python', arguments: ['c:/users/omers/dnd/decodeData.py', '--pathToData', localPath, '--pathToNpyEncodingFile', 'c:/users/omers/dnd/temp/codec.npy']);
+                            print('$decodingResult');
+                            //print(decodingResult.replaceAll('', replace));
+                            result.text = decodingResult;
                           }
                         }
                       }

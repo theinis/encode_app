@@ -151,12 +151,16 @@ addSynthesis(var sessionID, var sequence, var name) async {
       "title": name
   };
 
+  print(data);
+
   //make more robust with specific, time based ID for title
   Result response = await restApiClient.post(
     '/api/processRuns/queue',
     options: options,
     data: data,
   );
+
+  print(response.data);
 
 /*
     curl -X 'POST' \

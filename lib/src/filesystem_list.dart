@@ -107,19 +107,19 @@ class _FilesystemListState extends State<FilesystemList> {
     //    widget.rootDirectory.absolute.path)) {
       //_rootDirectory = widget.rootDirectory;
 
-    if(widget.rootDirectory.absolute.path == '/.') {
+    if(widget.rootDirectory.path == '/.') {
       //handling no directory change
-      _rootDirectory = Directory(_rootDirectory.absolute.path);
-      widget.currentDirectory = Directory(_rootDirectory.absolute.path);
-    } else if (widget.rootDirectory.absolute.path == '/..') {
+      _rootDirectory = Directory(_rootDirectory.path);//absolute.path);
+      widget.currentDirectory = Directory(_rootDirectory.path);//.absolute.path);
+    } else if (widget.rootDirectory.path == '/..') {
       //handling up 
-      final li = _rootDirectory.absolute.path.split(Platform.pathSeparator)..removeLast();
+      final li = _rootDirectory.path.split('/')..removeLast();//_rootDirectory.absolute.path.split(Platform.pathSeparator)..removeLast();
       String path = Path.joinAll(li);
       _rootDirectory = Directory(path);
       widget.currentDirectory = Directory(path);
     } else {
-      _rootDirectory = Directory(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
-      widget.currentDirectory = Directory(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
+      _rootDirectory = Directory(_rootDirectory.path + widget.rootDirectory.path);//(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
+      widget.currentDirectory = Directory(_rootDirectory.path + widget.rootDirectory.path);//Directory(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
     }
 
     _loadDirContents();
@@ -133,11 +133,12 @@ class _FilesystemListState extends State<FilesystemList> {
     final client = SSHClient(
       await SSHSocket.connect('146.169.21.39', 22),
         username: 'theinis',
-        onPasswordRequest: () => 'amb10entIMPERIAL',
+        onPasswordRequest: () => '',
     );
 
     final sftp = await client.sftp();
-    final items = await sftp.listdir(_rootDirectory.absolute.path);
+    print(_rootDirectory.path);
+    final items = await sftp.listdir(_rootDirectory.path);//_rootDirectory.absolute.path);
 
     for (var item in items) {
         //print(item.filename);
