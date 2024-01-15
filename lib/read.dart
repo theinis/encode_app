@@ -262,15 +262,11 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                         pickText: 'Pick directory',) as String;
 
                       final client = SSHClient(
-<<<<<<< HEAD
-                        await SSHSocket.connect('146.169.21.39', 22),
-                        username: 'theinis',
-                        onPasswordRequest: () => 'amb10entIMPERIAL',
-=======
+
                         await SSHSocket.connect('169.254.131.51',22),//'146.169.21.39', 22),
                         username: 'minit',
                         onPasswordRequest: () => 'minit',
->>>>>>> ca7ae024bf5752ad2cebf56b37b6c73eef76cd1d
+
                       );
 
                       final sftp = await client.sftp();
