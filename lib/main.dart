@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
               tabs: [
                 Tab(text: "Write"),
                 Tab(text: "Read"),
-                Tab(text: "Debug"),
+                Tab(text: "Configure & Debug"),
               ],
             ),
             title: const Text('DNA Storage App'),

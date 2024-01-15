@@ -3,6 +3,8 @@ import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:async';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'comms.dart';
+import 'package:network_discovery/network_discovery.dart';
+import 'package:masked_text_field/masked_text_field.dart';
 
 class DebugPage extends StatefulWidget {
   @override
@@ -61,7 +63,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
   late String sessionID;
   late var runID;
 
-  void _showDialog(BuildContext context) {
+  void _showCartridgeDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -222,6 +224,192 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
     );
   }
 
+
+  void _showNetworkDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+
+        String titleText = "Configure network";
+
+        var KBIPController = TextEditingController();
+        var MinionIPController = TextEditingController();
+
+        MaskedTextField kilobaserip = MaskedTextField(
+          textFieldController: KBIPController,
+          inputDecoration: const InputDecoration(
+            hintText: '192.192.192.192',
+            counterText: ""
+          ),
+          autofocus: true,
+          mask: 'xxx.xxx.xxx.xxx',
+          maxLength: 15,
+          keyboardType: TextInputType.number,
+          onChange: (String value) {
+            print(value);
+          },
+        );
+
+        MaskedTextField minionip = MaskedTextField(
+          textFieldController: MinionIPController,
+          inputDecoration: const InputDecoration(
+            hintText: '192.192.192.192',
+            counterText: ""
+          ),
+          autofocus: true,
+          mask: 'xxx.xxx.xxx.xxx',
+          maxLength: 15,
+          keyboardType: TextInputType.number,
+          onChange: (String value) {
+            print(value);
+          },
+        );
+
+/*
+        TextField kilobaserip = TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Kilobaser IP',
+          )
+        ); 
+
+        TextField minionip = TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Minion IP',
+          )
+        );
+*/
+
+        return StatefulBuilder(
+          builder: (context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(titleText),
+              content: SizedBox(
+                height: 200,
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("Enter Kilobaser IP Address"),
+                      ),
+                    ),
+                    const SizedBox(height: 5,),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: kilobaserip
+                    ),
+                    const SizedBox(height: 30,),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("Enter MinION IP Address"),
+                      ),
+                    ),
+                    const SizedBox(height: 5,),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: minionip
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Abort')
+                        ),
+                      
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Save')
+                        ),
+                      
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                        child: StatefulBuilder(builder: (context, StateSetter setStates) {
+                          return InkWell(
+                            onTap: () async {
+
+                              setState(() {});
+
+                              setStates(() {
+                                showIndicator = true;
+                              });
+
+                              String subnet = '192.168.1';
+
+                              //looking for Minion
+                              final minionstream = NetworkDiscovery.discover(subnet, 80); 
+
+                              //assumption: only one device will be found
+                              var minionip = "";
+                              minionstream.listen((NetworkAddress addr) {
+                                minionip = addr.ip.toString();
+                                print('Found MinION: ${addr.ip}');
+                              }).onDone(() => MinionIPController.text = minionip);
+
+                              //looking for Kilobaser
+                              final kilobaserstream = NetworkDiscovery.discover(subnet, 80); 
+
+                              var kilobaserip = "";
+                              kilobaserstream.listen((NetworkAddress addr) {
+                                kilobaserip = addr.ip.toString();
+                                print('Found Kilobaser: ${addr.ip}');
+                              }).onDone(() => KBIPController.text = kilobaserip);
+
+                              setState(() {});
+
+                              setStates(() {
+                                showIndicator = false;
+                              });
+
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(21)),
+                            child: Center(
+                              child: showIndicator
+                                ? Center(child: 
+                                    SizedBox( width: 15, height: 15, child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                    )))
+                                : Text(
+                                  "Find Devices",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                          ),
+                        ));
+                      }),
+                    )
+
+
+              ],
+            ),
+          ],
+        );
+          },
+        );
+      },
+    );
+  }
+  
+
   Widget build(BuildContext context) {
     return Scaffold(
       //appBar: AppBar(
@@ -239,9 +427,20 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      _showDialog(context);
+                      _showCartridgeDialog(context);
                     },
                     child: Text('Exchange cartridge'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+
+                      _showNetworkDialog(context);
+
+                    },
+                    child: Text('Configure network'),
                   ),
                 ),
               ],

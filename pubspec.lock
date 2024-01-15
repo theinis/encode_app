@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  dart_ping:
+    dependency: transitive
+    description:
+      name: dart_ping
+      sha256: "623cce963c66643cb26661187651a1c69ec09ac3a8bae3a17717aed0e17c0054"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.2"
   dartssh2:
     dependency: "direct main"
     description:
@@ -273,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  masked_text_field:
+    dependency: "direct main"
+    description:
+      name: masked_text_field
+      sha256: "35f9d09cb8c117df5c6b4f945f241432555ff9d16520e3636fdb86780a34972b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   matcher:
     dependency: transitive
     description:
@@ -302,6 +318,14 @@ packages:
     description:
       name: nested
       sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  network_discovery:
+    dependency: "direct main"
+    description:
+      name: network_discovery
+      sha256: c9369dd1a31c0b7132a4cbca3ee91fb5b314159e1b072a689ef991a79f1e4ee3
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"

@@ -93,7 +93,7 @@ initialiseComms() async {
 
   restApiClient = RestApiClient(
     options: RestApiClientOptions(
-      baseUrl: 'https://169.254.172.62:443/',
+      baseUrl: 'https://169.254.196.153:443/',
       //Enable caching of response data
       cacheEnabled: true,
     ),
