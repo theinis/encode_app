@@ -52,7 +52,7 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
     });
   }
 
-  List<String> buttonTexts = ['Start', 'Confirm', 'Confirm', 'Confirm', 'Confirm'];
+  List<String> buttonTexts = ['Start', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm', 'Confirm'];
   int currentTextIndex = 0;
   bool showIndicator = false;
   late String sessionID;
@@ -67,6 +67,11 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
         runID = '1234567890';
         String titleText = "Writing Data";
         String contentText = "Make sure chip and cartridge are ready";
+
+        bool swapcartridge = false;
+        bool initcartridge = false;
+        bool insertcartridge = false;
+
 
         LinearProgressIndicator progressindicator = LinearProgressIndicator(value: 1.0,
                           backgroundColor: Colors.orangeAccent,
@@ -86,9 +91,9 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                     showIndicator
                       ? SizedBox(height: 10)
                       : SizedBox(height: 1),
-                    showIndicator
-                        ? progressindicator
-                        : Text('')
+                    //showIndicator
+                    //    ? progressindicator
+                    //    : Text('')
                   ],
                 ),
               ),
@@ -119,7 +124,9 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                             print("synthesisName: $synthesisName");
 
-                            addSynthesis(sessionID, "AGTGTCTGTGATCGCCACGCCGCTTATCCGCCGCGCACCGGCGTCGAACCTAATAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTG", synthesisName);
+                            //AGTGTCTG
+                            //AGTGTCTGTGACCAGTACGACCCAGTACCGTCACGGTTAGGAATCAGCACGGTTCTGTCCCGCGCAGCAACTATTTCGCCGCGCCGCCGGCTCGACTCGGCCAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGT
+                            addSynthesis(sessionID, "AGTGTCTGTGACCAGTACGACCCAGTACCGTCACGGTTAGGAATCAGCACGGTTCTGTCCCGCGCAGCAACTATTTCGCCGCGCCGCCGGCTCGACTCGGCCAAGTGTCTGTGAAGTGTCTGTGAAGTGTCTGTGAAGT", synthesisName);
 
                             Result initResponse = await initCall(sessionID);
 
@@ -130,6 +137,36 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                               initResponse = await initCall(sessionID);
                               print("waiting");
                             } 
+
+                            int ptl = initResponse.data['processRunQueue'][0]['processTypes'].length;
+                            print(initResponse.data['processRunQueue'][0]['processTypes']);
+
+                            //XXX: currently we distinguish between the length/number of processtypes - should be made more robuts
+                            if(ptl == 6) {
+                              //no cartridge after cleaning -> initcartridge
+
+                              initcartridge = true;
+
+                              print("Init cartridge");
+
+                            } else if (ptl == 5) {
+                              //cartridge in -> swap cartridge
+
+                              swapcartridge = true;
+
+                              print("Swap cartridge");
+
+                            } else if (ptl == 4) {
+                              //no cartridge -> insert cartridge
+
+                              insertcartridge = true;
+
+                              print("Insert cartridge");
+
+                            } else {
+                              //XXX: undefined
+
+                            }                         
 
                             runID  = initResponse.data['processRunQueue'][0]['id'];
 
@@ -179,150 +216,775 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                               showIndicator = false;
                             });
 
-                          } else if (currentTextIndex == 1) {
 
-                            print("DEBUG - currentTextIndex is $currentTextIndex");
+                          } else if (currentTextIndex > 0) {
 
-                            Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+                            if(initcartridge) {
 
-                            //synthesis start
-                            setState(() {});
+                              if (currentTextIndex == 1) {
 
-                            setStates(() {
-                              contentText = "Synthesising";
-                              showIndicator = true;
-                            });
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
 
-                            bool firstime = true;
-                            int totaltime = 0;
+                                setStates(() {
+                                  contentText = "Closing lid";
+                                  showIndicator = true;
+                                });
 
-                            while(true) {
-                              Result initResponse = await initCall(sessionID);
+                                Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+                                print(chipInsertConfirmed.data);
 
-                              String status = initResponse.data['status']['currentState']['mode'];
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
 
-                              if(status == 'working' || status == 'synthesis' || status == 'cleaving' || status == 'drying') {
-                                
-                                double rtdouble = initResponse.data['status']['currentRemainingTime']/1000/60;
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }   
 
-                                int remainingtime = rtdouble.floor();
-
-                                if(firstime) {
-                                  totaltime = remainingtime;
-                                  firstime = false;
+                                  print("DEBUG - lid closing...");
                                 }
 
                                 setState(() {});
 
-                                String rt = remainingtime.toString();
-
                                 setStates(() {
-                                  //progressindicator!.value=0.0;
-                                  print("Synthesising - $rt minutes to go");
-                                  contentText = "Synthesising - $rt minutes to go";
-                                  //showIndicator = true;
+                                  contentText = "Flushing";
                                 });
 
-                              } else { break; }
+                                await Future.delayed(Duration(milliseconds: 5000));
+
+                                while(true) {
+                                  Result initResponse = await initCall(sessionID);
+
+                                  String status = initResponse.data['status']['currentState']['mode'];
+
+                                  if(status == 'working' || status == 'synthesis' || status == 'cleaving' || status == 'drying') {
+
+                                  } else { break; }
                               
-                              await Future.delayed(Duration(milliseconds: 30000));
-                            }
+                                  await Future.delayed(Duration(milliseconds: 30000));
+                                }
 
-                            setState(() {});
+                                setState(() {});
 
-                            setStates(() {
-                              contentText = "Synthesis done";
-                              showIndicator = false;
-                            });
+                                setStates(() {
+                                  contentText = "Insert cartridge";
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
 
-                            setStates(() {
-                              print("DEBUG - increment 2");
-                              currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
-                            });
+                              } else if (currentTextIndex == 2) {
 
-                          } else if (currentTextIndex == 2) {
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
 
-                            print("DEBUG - currentTextIndex is $currentTextIndex");
+                                setState(() {});
 
-                            Result confirmEndProcessCallResult = await confirmEndProcessCall(sessionID, runID);
+                                setStates(() {
+                                  contentText = "Moving cartridge up";
+                                  showIndicator = true;
+                                });
 
-                            //print(confirmEndProcessCallResult.data);
+                                Result cartridgeInsertConfirmed = await cartridgeInsertConfirmedCall(sessionID, runID);
+                                print(cartridgeInsertConfirmed.data);
 
-                            Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+                                while(! await isCartridgePositionClosed(sessionID)) {
+                                  await Future.delayed(Duration(milliseconds: 1000));
+                                  print("waiting");
+                                }
 
-                            //print(placeholderInsertConfirmed.data);
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Initialising cartridge";
+                                  showIndicator = true;
+                                });
+
+                                //initcartridge start
+
+                                bool firstime = true;
+                                int totaltime = 0;
+
+                                while(true) {
+                                  Result initResponse = await initCall(sessionID);
+
+                                  String status = initResponse.data['status']['currentState']['mode'];
+
+                                  if(status == 'working' || status == 'synthesis' || status == 'cleaving' || status == 'drying') {
+                                
+                                    double rtdouble = initResponse.data['status']['currentRemainingTime']/1000/60;
+
+                                    int remainingtime = rtdouble.floor();
+
+                                    if(firstime) {
+                                      totaltime = remainingtime;
+                                      firstime = false;
+                                    }
+
+                                    setState(() {});
+
+                                    String rt = remainingtime.toString();
+
+                                    setStates(() {
+                                      //progressindicator!.value=0.0;
+                                      print("Initialising - $rt minutes to go");
+                                      contentText = "Initialising - $rt minutes to go";
+                                      //showIndicator = true;
+                                    });
+
+                                  } else { break; }
+                              
+                                  await Future.delayed(Duration(milliseconds: 30000));
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Cartridge initialisation done";
+                                  showIndicator = false;
+                                  currentTextIndex = currentTextIndex + 1;
+                                });
+
+                              } else if (currentTextIndex == 3) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Opening lid...";
+                                  showIndicator = true;
+                                });
+
+                                Result skipRemoveAndStartNextRunResult = await skipRemoveAndStartNextRunCall(sessionID, runID);
+                                print(skipRemoveAndStartNextRunResult.data);
+
+                                await Future.delayed(Duration(milliseconds: 5000));
+
+                                Result skipRemoveAndStartNextRunResult2 = await skipRemoveAndStartNextRunCall(sessionID, runID);
+                                print(skipRemoveAndStartNextRunResult2.data);
+
+                                print("DEBUG - about to open lid");
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }
+
+                                  print("DEBUG - lid opening...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Please replace vial and chip";
+                                  print("DEBUG - increment 3");
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 4) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                //Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+
+                                print("DEBUG - closing lid section");
+
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                                print(placeholderInsertConfirmed2.data);
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Closing lid...";
+                                  showIndicator = true;
+                                });
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }
+
+                                  print("DEBUG - lid closing...");
+                                }
+
+                                //synthesis start
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Synthesising";
+                                });
+
+                                bool firstime = true;
+                                int totaltime = 0;
+
+                                while(true) {
+                                  Result initResponse = await initCall(sessionID);
+
+                                  String status = "";
+                                  double rtdouble = -1.0;
+
+                                  try { 
+                                    status = initResponse.data['status']['currentState']['mode'];
+                                    rtdouble = initResponse.data['status']['currentRemainingTime']/1000/60;
+                                  } catch (e) {
+                                    status = "initfailed";
+                                    print('Something really unknown: $e');
+                                  }
+
+                                  if(status == "initfailed" || status == 'working' || status == 'synthesis' || status == 'cleaving' || status == 'drying') {
+
+                                    int remainingtime = rtdouble.floor();
+
+                                    if(firstime) {
+                                      totaltime = remainingtime;
+                                      firstime = false;
+                                    }
+
+                                    setState(() {});
+
+                                    String rt = remainingtime.toString();
+
+                                    setStates(() {
+                                      //progressindicator!.value=0.0;
+                                      print("Synthesising - $rt minutes to go");
+                                      contentText = "Synthesising - $rt minutes to go";
+                                      //showIndicator = true;
+                                    });
+
+                                  } else { break; }
+                              
+                                  await Future.delayed(Duration(milliseconds: 30000));
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Synthesis done";
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 5) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Opening lid...";
+                                  showIndicator = true;
+                                });
+
+                                try {
+                                  Result initResponse = await initCall(sessionID);
+                                  print(initResponse.data);
+                                } catch (e) {
+                                    print('Something really unknown: $e');
+                                }
+
+                                Result confirmEndProcessCallResult = await confirmEndProcessCall(sessionID, runID);
+                                print(confirmEndProcessCallResult.data);
+
+                                await Future.delayed(Duration(milliseconds: 2000));
+
+                                Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed.data);
+
+                                await Future.delayed(Duration(milliseconds: 2000));
                             
-                            Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed2.data);
 
-                            //print(placeholderInsertConfirmed2.data);
+                                print("DEBUG - about to open lid");
 
-                            print("DEBUG - about to open lid");
-
-                            //won't update content text if not present
-                            setState(() {});
-
-                            setStates(() {
-                              contentText = "Opening lid...";
-                              showIndicator = true;
-                            });
-
-
-                            while(true) {
+                                while(true) {
                               
-                              await Future.delayed(Duration(milliseconds: 2000));
+                                  await Future.delayed(Duration(milliseconds: 2000));
 
-                              if(!await isLidMoving(sessionID)) {
-                                break;
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }
+
+                                  print("DEBUG - lid opening...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Please remove vial and replace chip with placeholder";
+                                  print("DEBUG - increment 3");
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 6) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                print("DEBUG - closing lid section");
+
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                                print(placeholderInsertConfirmed2.data);
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Closing lid...";
+                                  showIndicator = true;
+                                });
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                  break;
+                                }
+
+                                print("DEBUG - lid closing...");
                               }
 
-                              print("DEBUG - lid opening...");
+                              Navigator.pop(context);
+
+                              } else {
+
+                                print("DEBUG - undefined currentTextIndex with $currentTextIndex");
+
+                              }
                             }
 
-                            setState(() {});
+                            if(insertcartridge) {
 
-                            setStates(() {
-                              contentText = "Please remove vial and replace chip with placeholder";
-                              print("DEBUG - increment 3");
-                              currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
-                              showIndicator = false;
-                            });
+                              if (currentTextIndex == 1) {
 
-                          } else if (currentTextIndex == 3) {
-                            print("DEBUG - currentTextIndex is $currentTextIndex");
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
 
-                            //Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+                                setStates(() {
+                                  contentText = "Closing lid";
+                                  showIndicator = true;
+                                });
 
-                            print("DEBUG - closing lid section");
+                                Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+                                print(chipInsertConfirmed.data);
 
-                            Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
-
-                            print(placeholderInsertConfirmed2.data);
-
-                            setState(() {});
-
-                            setStates(() {
-                              contentText = "Closing lid...";
-                              currentTextIndex = (currentTextIndex + 1) % buttonTexts.length;
-                              showIndicator = true;
-                            });
-
-                            while(true) {
+                                while(true) {
                               
-                              await Future.delayed(Duration(milliseconds: 2000));
+                                  await Future.delayed(Duration(milliseconds: 2000));
 
-                              if(!await isLidMoving(sessionID)) {
-                                break;
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }   
+
+                                  print("DEBUG - lid closing...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Insert cartridge";
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 2) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Moving cartridge up";
+                                  showIndicator = true;
+                                });
+
+                                Result cartridgeInsertConfirmed = await cartridgeInsertConfirmedCall(sessionID, runID);
+                                print(cartridgeInsertConfirmed.data);
+
+                                while(! await isCartridgePositionClosed(sessionID)) {
+                                  await Future.delayed(Duration(milliseconds: 1000));
+                                  print("waiting");
+                                }
+
+                                //synthesis start
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Synthesising";
+                                });
+
+                                bool firstime = true;
+                                int totaltime = 0;
+
+                                while(true) {
+
+                                  Result initResponse = await initCall(sessionID);
+
+                                  String status = "";
+                                  double rtdouble = -1.0;
+
+                                  try { 
+                                    status = initResponse.data['status']['currentState']['mode'];
+                                    rtdouble = initResponse.data['status']['currentRemainingTime']/1000/60;
+                                  } catch (e) {
+                                    status = "initfailed";
+                                    print('Something really unknown: $e');
+                                  }
+
+                                  if(status == "initfailed" || status == 'working' || status == 'synthesis' || status == 'cleaving' || status == 'drying') {
+
+                                    int remainingtime = rtdouble.floor();
+
+                                    if(firstime) {
+                                      totaltime = remainingtime;
+                                      firstime = false;
+                                    }
+
+                                    setState(() {});
+
+                                    String rt = remainingtime.toString();
+
+                                    setStates(() {
+                                      //progressindicator!.value=0.0;
+                                      print("Synthesising - $rt minutes to go");
+                                      contentText = "Synthesising - $rt minutes to go";
+                                      //showIndicator = true;
+                                    });
+
+                                  } else { break; }
+                              
+                                  await Future.delayed(Duration(milliseconds: 30000));
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Synthesis done";
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 3) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Opening lid...";
+                                  showIndicator = true;
+                                });
+
+                                Result confirmEndProcessCallResult = await confirmEndProcessCall(sessionID, runID);
+                                print(confirmEndProcessCallResult.data);
+
+                                Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed.data);
+                            
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed2.data);
+
+                                print("DEBUG - about to open lid");
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }
+
+                                  print("DEBUG - lid opening...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Please remove vial and replace chip with placeholder";
+                                  print("DEBUG - increment 3");
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 4) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                print("DEBUG - closing lid section");
+
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                                print(placeholderInsertConfirmed2.data);
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Closing lid...";
+                                  showIndicator = true;
+                                });
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                  break;
+                                }
+
+                                print("DEBUG - lid closing...");
                               }
 
-                              print("DEBUG - lid closing...");
+                              Navigator.pop(context);
+
+                              } else {
+
+                                print("DEBUG - undefined currentTextIndex with $currentTextIndex");
+
+                              }
                             }
 
-                            Navigator.pop(context);
+                            if(swapcartridge) {
 
-                          } else {
+                              if (currentTextIndex == 1) {
 
-                            print("DEBUG - undefined currentTextIndex with $currentTextIndex");
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
 
+                                setStates(() {
+                                  contentText = "Closing lid";
+                                  showIndicator = true;
+                                });
+
+                                Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+                                print(chipInsertConfirmed.data);
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }   
+
+                                  print("DEBUG - lid closing...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Eject old cartridge";
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 2) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Lowering cartridge";
+                                  showIndicator = true;
+                                });
+
+                                //pendinganswer now
+                                Result response = await confirmReadyForCartridgeDownCall(sessionID, runID);
+                          
+                                while(! await isAnswerPending(sessionID)) {
+                                  await Future.delayed(Duration(milliseconds: 500));
+                                  print("waiting");
+                                } 
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Please remove cartridge";
+                                  currentTextIndex = (currentTextIndex + 1);
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 3) {
+
+                                setStates(() {
+                                  showIndicator = true;
+                                });
+
+                                Result response = await confirmReadyForCartridgeDownCall(sessionID, runID);
+                                print(response.data);
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Please insert new cartridge";
+                                  print("DEBUG - increment 2");
+                                  currentTextIndex = (currentTextIndex + 1);
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 4) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Moving cartridge up";
+                                  showIndicator = true;
+                                });
+
+                                Result cartridgeInsertConfirmed = await cartridgeInsertConfirmedCall(sessionID, runID);
+                                print(cartridgeInsertConfirmed.data);
+
+                                while(! await isCartridgePositionClosed(sessionID)) {
+                                  await Future.delayed(Duration(milliseconds: 1000));
+                                  print("waiting");
+                                }
+
+                                //synthesis start
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Synthesising";
+                                });
+
+                                bool firstime = true;
+                                int totaltime = 0;
+
+                                while(true) {
+                                  Result initResponse = await initCall(sessionID);
+
+                                  String status = "";
+                                  double rtdouble = -1.0;
+
+                                  try { 
+                                    status = initResponse.data['status']['currentState']['mode'];
+                                    rtdouble = initResponse.data['status']['currentRemainingTime']/1000/60;
+                                  } catch (e) {
+                                    status = "initfailed";
+                                    print('Something really unknown: $e');
+                                  }
+
+                                  if(status == "initfailed" || status == 'working' || status == 'synthesis' || status == 'cleaving' || status == 'drying') {
+
+                                    int remainingtime = rtdouble.floor();
+
+                                    if(firstime) {
+                                      totaltime = remainingtime;
+                                      firstime = false;
+                                    }
+
+                                    setState(() {});
+
+                                    String rt = remainingtime.toString();
+
+                                    setStates(() {
+                                      //progressindicator!.value=0.0;
+                                      print("Synthesising - $rt minutes to go");
+                                      contentText = "Synthesising - $rt minutes to go";
+                                      //showIndicator = true;
+                                    });
+
+                                  } else { break; }
+                              
+                                  await Future.delayed(Duration(milliseconds: 30000));
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Synthesis done";
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 5) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Opening lid...";
+                                  showIndicator = true;
+                                });
+
+                                Result confirmEndProcessCallResult = await confirmEndProcessCall(sessionID, runID);
+                                print(confirmEndProcessCallResult.data);
+
+                                await Future.delayed(Duration(milliseconds: 2000));
+
+                                Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed.data);
+
+                                await Future.delayed(Duration(milliseconds: 2000));
+                            
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed2.data);
+
+                                print("DEBUG - about to open lid");
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }
+
+                                  print("DEBUG - lid opening...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Please remove vial and replace chip with placeholder";
+                                  print("DEBUG - increment 3");
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 6) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                print("DEBUG - closing lid section");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Closing lid...";
+                                  showIndicator = true;
+                                });
+
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed2.data);
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                  break;
+                                }
+
+                                print("DEBUG - lid closing...");
+                              }
+
+                              Navigator.pop(context);
+
+                              } else {
+
+                                print("DEBUG - undefined currentTextIndex with $currentTextIndex");
+
+                              }
+                            }
                           }
                       },
                       child: Container(
