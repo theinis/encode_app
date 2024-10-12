@@ -71,6 +71,7 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
         bool swapcartridge = false;
         bool initcartridge = false;
         bool insertcartridge = false;
+        bool demomode = false;
 
 
         LinearProgressIndicator progressindicator = LinearProgressIndicator(value: 1.0,
@@ -162,6 +163,12 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
                               insertcartridge = true;
 
                               print("Insert cartridge");
+
+                            } else if (ptl == 2) {
+
+                              demomode = true;
+
+                              print("Demo mode");
 
                             } else {
                               //XXX: undefined
@@ -965,6 +972,120 @@ class _EncodingPageState extends State<EncodingPage> with TickerProviderStateMix
 
                                 Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
                                 print(placeholderInsertConfirmed2.data);
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                  break;
+                                }
+
+                                print("DEBUG - lid closing...");
+                              }
+
+                              Navigator.pop(context);
+
+                              } else {
+
+                                print("DEBUG - undefined currentTextIndex with $currentTextIndex");
+
+                              }
+                            }
+
+                            if(demomode) {
+
+                              if (currentTextIndex == 1) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Closing lid";
+                                  showIndicator = true;
+                                });
+
+                                Result chipInsertConfirmed = await chipInsertConfirmedCall(sessionID, runID);
+                                print(chipInsertConfirmed.data);
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }   
+
+                                  print("DEBUG - lid closing...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Finished synthesis";
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 2) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Opening lid...";
+                                  showIndicator = true;
+                                });
+
+                                Result confirmEndProcessCallResult = await confirmEndProcessCall(sessionID, runID);
+                                print(confirmEndProcessCallResult.data);
+
+                                Result placeholderInsertConfirmed = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed.data);
+                            
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+                                print(placeholderInsertConfirmed2.data);
+
+                                print("DEBUG - about to open lid");
+
+                                while(true) {
+                              
+                                  await Future.delayed(Duration(milliseconds: 2000));
+
+                                  if(!await isLidMoving(sessionID)) {
+                                    break;
+                                  }
+
+                                  print("DEBUG - lid opening...");
+                                }
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Please remove vial and replace chip with placeholder";
+                                  print("DEBUG - increment 3");
+                                  currentTextIndex = currentTextIndex + 1;
+                                  showIndicator = false;
+                                });
+
+                              } else if (currentTextIndex == 3) {
+
+                                print("DEBUG - currentTextIndex is $currentTextIndex");
+
+                                print("DEBUG - closing lid section");
+
+                                Result placeholderInsertConfirmed2 = await placeholderInsertConfirmedCall(sessionID, runID);
+
+                                print(placeholderInsertConfirmed2.data);
+
+                                setState(() {});
+
+                                setStates(() {
+                                  contentText = "Closing lid...";
+                                  showIndicator = true;
+                                });
 
                                 while(true) {
                               

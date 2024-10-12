@@ -1,4 +1,5 @@
 import 'package:rest_api_client/rest_api_client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 late IRestApiClient restApiClient;
 
@@ -117,9 +118,22 @@ initialiseComms() async {
 
   await RestApiClient.initFlutter();
 
+  final prefs = await SharedPreferences.getInstance();
+  String kbip = prefs.getString('kbip') ?? '192.192.192.2';
+
+  if (kbip == '') {
+    kbip = '1.1.1.1';
+  }
+
+  print(kbip);
+
+  final burl = "https://$kbip:443/";
+
+  print (burl);
+
   restApiClient = RestApiClient(
     options: RestApiClientOptions(
-      baseUrl: 'https://169.254.201.225:443/',
+      baseUrl: burl,
       //Enable caching of response data
       cacheEnabled: true,
     ),

@@ -4,6 +4,7 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'filesystem_picker.dart';
 import 'package:shell/shell.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:io';
 
@@ -261,17 +262,30 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                         showGoUp: false,
                         pickText: 'Pick directory',) as String;
 
+
+                      final prefs = await SharedPreferences.getInstance();
+                      final minionip = prefs.getString('minionip') ?? '192.192.192.1';
+                      final minionuser = prefs.getString('minionuser') ?? 'minit';
+                      final minionpass = prefs.getString('minionpass') ?? 'minit';
+
                       final client = SSHClient(
-
-                        await SSHSocket.connect('169.254.131.51',22),//'146.169.21.39', 22),
-                        username: 'minit',
-                        onPasswordRequest: () => 'minit',
-
+                        await SSHSocket.connect(minionip,22),//'146.169.21.39', 22),
+                        username: minionuser,
+                        onPasswordRequest: () => minionpass,
                       );
 
                       final sftp = await client.sftp();
-                      print(path);
                       final items = await sftp.listdir(path);
+
+                      var totalcount = 0;
+
+                      for (var item in items) {
+                        if(item.attr.isFile) {
+                          if (item.filename.toLowerCase().contains("fastq.gz")) {
+                            totalcount++;
+                          }
+                        }
+                      }
 
                       for (var item in items) {
                         if(item.attr.isFile) {
@@ -282,16 +296,17 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                             final content = await file.readBytes();
                             final f = new File(item.filename);
                             f.writeAsBytesSync(content);
-                            var shell = new Shell();
-                            var localPath = await shell.startAndReadAsString('cd');
-                            //print('cwd: $localPath');
-                            var decodingResult = await shell.startAndReadAsString('python', arguments: ['c:/users/omers/dnd/decodeData.py', '--pathToData', localPath, '--pathToNpyEncodingFile', 'c:/users/omers/dnd/temp/codec.npy']);
-                            print('$decodingResult');
-                            //print(decodingResult.replaceAll('', replace));
-                            result.text = decodingResult;
                           }
                         }
                       }
+
+                      var shell = new Shell();
+                      var localPath = await shell.startAndReadAsString('cd');
+                      //print('cwd: $localPath');
+                      var decodingResult = await shell.startAndReadAsString('python', arguments: ['c:/users/omers/dnd/decodeData.py', '--pathToData', localPath, '--pathToNpyEncodingFile', 'c:/users/omers/dnd/temp/codec.npy']);
+                      print('$decodingResult');
+                      //print(decodingResult.replaceAll('', replace));
+                      result.text = decodingResult;
 
                       client.close();
                       await client.done;

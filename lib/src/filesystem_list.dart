@@ -7,6 +7,7 @@ import 'filesystem_list_tile.dart';
 import 'options/theme/_filelist_theme.dart';
 import 'progress_indicator.dart';
 import 'package:dartssh2/dartssh2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// The signature of the folder and file list widget filter.
 typedef FilesystemListFilter = bool Function(
@@ -130,10 +131,13 @@ class _FilesystemListState extends State<FilesystemList> {
 
     List<FileSystemEntity> files = List<FileSystemEntity>.empty(growable: true);
 
+    final prefs = await SharedPreferences.getInstance();
+    final minionip = prefs.getString('minionip') ?? '192.192.192.1';
+
     final client = SSHClient(
-      await SSHSocket.connect('146.169.21.39', 22),
-        username: 'theinis',
-        onPasswordRequest: () => '',
+      await SSHSocket.connect(minionip, 22),
+        username: 'minit',
+        onPasswordRequest: () => 'minit',
     );
 
     final sftp = await client.sftp();

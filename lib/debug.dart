@@ -1,3 +1,6 @@
+import 'dart:collection';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:rest_api_client/rest_api_client.dart';
 import 'dart:async';
@@ -5,6 +8,8 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'comms.dart';
 import 'package:network_discovery/network_discovery.dart';
 import 'package:masked_text_field/masked_text_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:file_picker/file_picker.dart';
 
 class DebugPage extends StatefulWidget {
   @override
@@ -586,15 +591,27 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
     );
   }
 
-  void _showNetworkDialog(BuildContext context) {
+  void _showNetworkDialog(BuildContext context, SharedPreferences prefs) {
+
+    var KBIPController = TextEditingController();
+    var KBUserController = TextEditingController();
+    var KBPassController = TextEditingController();
+    var MinionIPController = TextEditingController();
+    var MinionUserController = TextEditingController();
+    var MinionPassController = TextEditingController();
+
+    MinionIPController.text = prefs.getString('minionip') ?? '192.192.192.1';
+    MinionUserController.text = prefs.getString('minionuser') ?? 'minit';
+    MinionPassController.text = prefs.getString('minionpass') ?? 'minit';
+    KBIPController.text = prefs.getString('kbip') ?? '192.192.192.2';
+    KBUserController.text = prefs.getString('kbuser') ?? 'test';
+    KBPassController.text = prefs.getString('kbpass') ?? 'test';
+    
     showDialog(
       context: context,
       builder: (context) {
 
-        String titleText = "Configure network";
-
-        var KBIPController = TextEditingController();
-        var MinionIPController = TextEditingController();
+        String titleText = "Configure devices";
 
         MaskedTextField kilobaserip = MaskedTextField(
           textFieldController: KBIPController,
@@ -606,9 +623,31 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
           mask: 'xxx.xxx.xxx.xxx',
           maxLength: 15,
           keyboardType: TextInputType.number,
-          onChange: (String value) {
-            print(value);
-          },
+          onChange: (String value) {},
+        );
+
+        MaskedTextField kilobaseruser = MaskedTextField(
+          textFieldController: KBUserController,
+          inputDecoration: const InputDecoration(
+            counterText: ""
+          ),
+          autofocus: true,
+          maxLength: 15,
+          mask: '',
+          keyboardType: TextInputType.text,
+          onChange: (String value) {},
+        );
+
+        MaskedTextField kilobaserpass = MaskedTextField(
+          textFieldController: KBPassController,
+          inputDecoration: const InputDecoration(
+            counterText: ""
+          ),
+          autofocus: true,
+          maxLength: 15,
+          mask: '',
+          keyboardType: TextInputType.text,
+          onChange: (String value) {},
         );
 
         MaskedTextField minionip = MaskedTextField(
@@ -621,58 +660,102 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
           mask: 'xxx.xxx.xxx.xxx',
           maxLength: 15,
           keyboardType: TextInputType.number,
-          onChange: (String value) {
-            print(value);
-          },
+          onChange: (String value) {},
         );
 
-/*
-        TextField kilobaserip = TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Kilobaser IP',
-          )
-        ); 
-
-        TextField minionip = TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Minion IP',
-          )
+        MaskedTextField minionuser = MaskedTextField(
+          textFieldController: MinionUserController,
+          inputDecoration: const InputDecoration(
+            counterText: ""
+          ),
+          autofocus: true,
+          mask: '',
+          maxLength: 15,
+          keyboardType: TextInputType.text,
+          onChange: (String value) {},
         );
-*/
+
+        MaskedTextField minionpass = MaskedTextField(
+          textFieldController: MinionPassController,
+          inputDecoration: const InputDecoration(
+            counterText: ""
+          ),
+          autofocus: true,
+          mask: '',
+          maxLength: 15,
+          keyboardType: TextInputType.text,
+          onChange: (String value) {},
+        );
 
         return StatefulBuilder(
           builder: (context, StateSetter setState) {
             return AlertDialog(
               title: Text(titleText),
               content: SizedBox(
-                height: 200,
+                height: 500,
                 child: Column(
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        child: Text("Enter Kilobaser IP Address"),
+                        child: Text("Kilobaser IP Address"),
                       ),
                     ),
-                    const SizedBox(height: 5,),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: kilobaserip
                     ),
-                    const SizedBox(height: 30,),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        child: Text("Enter MinION IP Address"),
+                        child: Text("Kilobaser Username"),
                       ),
                     ),
-                    const SizedBox(height: 5,),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: kilobaseruser
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("Kilobaser Password"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: kilobaserpass
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("MinION IP Address"),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: minionip
                     ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("MinION Username"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: minionuser
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("MinION Password"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: minionpass
+                    ),
+
                   ],
                 ),
               ),
@@ -691,7 +774,15 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                         child: ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () { 
+                            prefs.setString('minionip', MinionIPController.text);
+                            prefs.setString('minionuser', MinionUserController.text);
+                            prefs.setString('minionpass', MinionPassController.text);
+                            prefs.setString('kbip', KBIPController.text);
+                            prefs.setString('kbuser', KBUserController.text);
+                            prefs.setString('kbpass', KBPassController.text);
+                            Navigator.pop(context); 
+                          },
                           child: Text('Save')
                         ),
                       
@@ -711,17 +802,33 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
                                 showIndicator = true;
                               });
 
-                              String subnetont = '169.254.26';
+                              //String subnetont = '169.254.26';
+                              String subnetont = '169.254.';
 
                               //looking for Minion
-                              final minionstream = NetworkDiscovery.discover(subnetont, 80); 
-
+                              
                               //assumption: only one device will be found
                               var minionip = "";
-                              minionstream.listen((NetworkAddress addr) {
-                                minionip = addr.ip.toString();
-                                print('Found MinION: ${addr.ip}');
-                              }).onDone(() => MinionIPController.text = minionip);
+
+                              for (var i = 0; i < 256; i++) {
+
+                                print(subnetont+i.toString());
+
+                                var minionstream = NetworkDiscovery.discover(subnetont+i.toString(), 22); 
+
+                                await minionstream.listen((NetworkAddress addr) {
+                                  minionip = addr.ip.toString();
+                                  print('Found MinION: ${addr.ip}');
+                                }).asFuture();
+
+                                print(minionip);
+
+                                if(minionip.isNotEmpty) {
+                                  MinionIPController.text = minionip;
+                                  KBIPController.text = '196.168.1.23';
+                                  break;
+                                }
+                              }       
 
                               String subnetkb = '169.254.26';
 
@@ -775,6 +882,130 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
       },
     );
   }
+
+  void _showLoggingDialog(BuildContext context, SharedPreferences prefs) {
+
+    var LogLocationController = TextEditingController();
+
+    const List<String> list = <String>['OFF', 'SHOUT', 'SEVERE', 'WARNING', 'INFO'];
+
+    String dropdownValue = prefs.getString('loglevel') ?? 'OFF';
+    LogLocationController.text = prefs.getString('loglocation') ?? '';
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+
+        String titleText = "Configure logging";
+
+        DropdownMenu loglevel = DropdownMenu<String>(
+          initialSelection: dropdownValue,
+            onSelected: (String? value) {
+              // This is called when the user selects an item.
+              print(value);
+              setState(() {
+              dropdownValue = value!;
+            });
+            },
+            dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+            return DropdownMenuEntry<String>(value: value, label: value);
+          }).toList(),
+        );
+
+        MaskedTextField loglocation = MaskedTextField(
+          textFieldController: LogLocationController,
+          inputDecoration: const InputDecoration(
+            counterText: ""
+          ),
+          autofocus: true,
+          maxLength: 15,
+          mask: '',
+          keyboardType: TextInputType.text,
+          onChange: (String value) {},
+        );
+
+        return StatefulBuilder(
+          builder: (context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(titleText),
+              content: SizedBox(
+                height: 200,
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("Log level"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0)
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: loglevel,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("Log file location"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: loglocation
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Close')
+                        ),
+                      
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                        child: ElevatedButton(
+                          onPressed: () { 
+                            prefs.setString('loglevel', dropdownValue);
+                            prefs.setString('loglocation', LogLocationController.text);
+                            Navigator.pop(context); 
+                          },
+                          child: Text('Save')
+                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                        child: ElevatedButton(
+                          onPressed: () async { 
+                            
+                            String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+                            if (selectedDirectory != null) {
+                              LogLocationController.text = selectedDirectory;
+                            }
+                          },
+                          child: Text('Pick directoy')
+                        ),
+                    ),
+              ],
+            ),
+          ],
+        );
+          },
+        );
+      },
+    );
+  }
   
 
   Widget build(BuildContext context) {
@@ -795,10 +1026,25 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
                   child: ElevatedButton(
                     onPressed: () async {
 
-                      _showNetworkDialog(context);
+                      final prefs = await SharedPreferences.getInstance();
+
+                      _showNetworkDialog(context, prefs);
 
                     },
-                    child: Text('Configure network'),
+                    child: Text('Configure Access'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+
+                      final prefs = await SharedPreferences.getInstance();
+
+                      _showLoggingDialog(context, prefs);
+
+                    },
+                    child: Text('Configure logging'),
                   ),
                 ),
                 Padding(
