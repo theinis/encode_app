@@ -26,6 +26,7 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
   bool _localOnly = false;
   bool _copyFileToCacheDir = true;
   String? _pickedFilePath;
+  double _progress = 0.0;
 
 
   Widget setUpButtonChild() {
@@ -208,8 +209,136 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
     });
   }
 
+  void _updateProgress() {
+    const oneSec = const Duration(seconds: 1);
+    Timer.periodic(oneSec, (Timer t) {
+      setState(() {
+        _progress += 0.2;
+        if (_progress.toStringAsFixed(1) == '1.0') {
+          t.cancel();
+          return;
+        }
+      });
+    });
+  }
+
+  void _showReadProgress(BuildContext context, String directory, SSHClient client) {
+
+    String contentText = "Ready to download data";
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        sessionID = '1234567890';
+        runID = '1234567890';
+        String titleText = "Decoding data";
+
+        _updateProgress();
+
+        LinearProgressIndicator progressindicator = LinearProgressIndicator(
+                          value: _progress,
+                          backgroundColor: Colors.orangeAccent,
+                          valueColor: AlwaysStoppedAnimation(Colors.blue),
+                          minHeight: 8,
+        );
+
+        return StatefulBuilder(
+          builder: (context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(titleText),
+              content: SizedBox(
+                height: 50,
+                child: Column(
+                  children: [
+                    Text(contentText),
+                    showIndicator
+                      ? SizedBox(height: 10)
+                      : SizedBox(height: 1),
+                    showIndicator
+                        ? progressindicator
+                        : Text('')
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      //this should lead to all state being removed, i.e., the queue cleared etc.
+                      child: Text("Cancel"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async  {
+
+                        final sftp = await client.sftp();
+                        //final items = await sftp.listdir(path);
+                        final items = await sftp.listdir('/homes/theinis/DnD');
+
+                        var totalcount = 0;
+
+                        for (var item in items) {
+                          if(item.attr.isFile) {
+                            if (item.filename.toLowerCase().contains("fastq")) {
+                              totalcount++;
+                            }
+                          }
+                        }
+
+                        print(totalcount);
+
+                        var currentcount = 0;
+
+                        for (var item in items) {
+                          if(item.attr.isFile) {
+                            if (item.filename.toLowerCase().contains("fastq")) {
+                              print(item.filename);
+
+                              setState(() {
+                                _progress = currentcount/totalcount;
+                                contentText = "Downloading file " + currentcount.toString() + "/" + totalcount.toString();
+                              });
+
+                              final file = await sftp.open(directory + '/' + item.filename);
+                              final content = await file.readBytes();
+                              final f = new File(item.filename);
+                              f.writeAsBytesSync(content);
+
+                             // sleep(Duration(seconds:1));
+                            }
+                          }
+                        }
+
+                        var shell = new Shell();
+                        var localPath = await shell.startAndReadAsString('cd');
+                        //print('cwd: $localPath');
+                        //var decodingResult = await shell.startAndReadAsString('python', arguments: ['c:/users/omers/dnd/decodeData.py', '--pathToData', localPath, '--pathToNpyEncodingFile', 'c:/users/omers/dnd/temp/codec.npy']);
+                        //print('$decodingResult');
+                        //print(decodingResult.replaceAll('', replace));
+                        //result.text = decodingResult;
+
+                        client.close();
+                        await client.done;
+
+                        Navigator.pop(context);
+                      },
+                      //this should lead to all state being removed, i.e., the queue cleared etc.
+                      child: Text("Start"),
+                    ),
+              ],
+            ),
+          ],
+        );
+          },
+        );
+      },
+    );
+  }
+
   Widget build(BuildContext context) {
     TextEditingController result = TextEditingController();
+    String contentText = "Starting download";
 
     return Scaffold(
       body: Center(
@@ -252,7 +381,13 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                   child: ElevatedButton(
                     onPressed: () async {
 
-                      var rootPath = Directory('/home/minit');//'/homes/theinis');
+                      //var rootPath = Directory('/home/minit');//
+                      var rootPath = Directory('/homes/theinis');
+
+                      final prefs = await SharedPreferences.getInstance();
+                      final minionip = prefs.getString('minionip') ?? '192.192.192.1';
+                      final minionuser = prefs.getString('minionuser') ?? 'minit';
+                      final minionpass = prefs.getString('minionpass') ?? 'minit';
 
                       String path = await FilesystemPicker.openDialog(title: 'Choose sequencing run',
                         context: context,
@@ -261,55 +396,15 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                         fileTileSelectMode: FileTileSelectMode.wholeTile,
                         showGoUp: false,
                         pickText: 'Pick directory',) as String;
-
-
-                      final prefs = await SharedPreferences.getInstance();
-                      final minionip = prefs.getString('minionip') ?? '192.192.192.1';
-                      final minionuser = prefs.getString('minionuser') ?? 'minit';
-                      final minionpass = prefs.getString('minionpass') ?? 'minit';
-
+                      
                       final client = SSHClient(
-                        await SSHSocket.connect(minionip,22),//'146.169.21.39', 22),
+                        await SSHSocket.connect(minionip, 22),//'146.169.21.39', 22),
                         username: minionuser,
                         onPasswordRequest: () => minionpass,
                       );
 
-                      final sftp = await client.sftp();
-                      final items = await sftp.listdir(path);
+                      _showReadProgress(context, '/homes/theinis/DnD', client);
 
-                      var totalcount = 0;
-
-                      for (var item in items) {
-                        if(item.attr.isFile) {
-                          if (item.filename.toLowerCase().contains("fastq.gz")) {
-                            totalcount++;
-                          }
-                        }
-                      }
-
-                      for (var item in items) {
-                        if(item.attr.isFile) {
-                          if (item.filename.toLowerCase().contains("fastq.gz")) {
-                            print(item.filename);
-
-                            final file = await sftp.open(path + '/' + item.filename);
-                            final content = await file.readBytes();
-                            final f = new File(item.filename);
-                            f.writeAsBytesSync(content);
-                          }
-                        }
-                      }
-
-                      var shell = new Shell();
-                      var localPath = await shell.startAndReadAsString('cd');
-                      //print('cwd: $localPath');
-                      var decodingResult = await shell.startAndReadAsString('python', arguments: ['c:/users/omers/dnd/decodeData.py', '--pathToData', localPath, '--pathToNpyEncodingFile', 'c:/users/omers/dnd/temp/codec.npy']);
-                      print('$decodingResult');
-                      //print(decodingResult.replaceAll('', replace));
-                      result.text = decodingResult;
-
-                      client.close();
-                      await client.done;
 
                     },
                     child: Text('Decode'),

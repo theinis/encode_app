@@ -621,7 +621,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
           ),
           autofocus: true,
           mask: 'xxx.xxx.xxx.xxx',
-          maxLength: 15,
+          maxLength: 30,
           keyboardType: TextInputType.number,
           onChange: (String value) {},
         );
@@ -632,7 +632,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
             counterText: ""
           ),
           autofocus: true,
-          maxLength: 15,
+          maxLength: 30,
           mask: '',
           keyboardType: TextInputType.text,
           onChange: (String value) {},
@@ -644,7 +644,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
             counterText: ""
           ),
           autofocus: true,
-          maxLength: 15,
+          maxLength: 30,
           mask: '',
           keyboardType: TextInputType.text,
           onChange: (String value) {},
@@ -658,7 +658,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
           ),
           autofocus: true,
           mask: 'xxx.xxx.xxx.xxx',
-          maxLength: 15,
+          maxLength: 30,
           keyboardType: TextInputType.number,
           onChange: (String value) {},
         );
@@ -670,7 +670,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
           ),
           autofocus: true,
           mask: '',
-          maxLength: 15,
+          maxLength: 30,
           keyboardType: TextInputType.text,
           onChange: (String value) {},
         );
@@ -682,7 +682,7 @@ class _DebugPageState extends State<DebugPage> with TickerProviderStateMixin {
           ),
           autofocus: true,
           mask: '',
-          maxLength: 15,
+          maxLength: 30,
           keyboardType: TextInputType.text,
           onChange: (String value) {},
         );

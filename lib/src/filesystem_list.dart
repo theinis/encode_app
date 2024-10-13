@@ -119,8 +119,8 @@ class _FilesystemListState extends State<FilesystemList> {
       _rootDirectory = Directory(path);
       widget.currentDirectory = Directory(path);
     } else {
-      _rootDirectory = Directory(_rootDirectory.path + widget.rootDirectory.path);//(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
-      widget.currentDirectory = Directory(_rootDirectory.path + widget.rootDirectory.path);//Directory(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
+      _rootDirectory = Directory(_rootDirectory.path + '/' + widget.rootDirectory.path);//(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
+      widget.currentDirectory = Directory(_rootDirectory.path + '/' + widget.rootDirectory.path);//Directory(_rootDirectory.absolute.path + widget.rootDirectory.absolute.path);
     }
 
     _loadDirContents();
@@ -133,11 +133,13 @@ class _FilesystemListState extends State<FilesystemList> {
 
     final prefs = await SharedPreferences.getInstance();
     final minionip = prefs.getString('minionip') ?? '192.192.192.1';
+    final minionuser = prefs.getString('minionuser') ?? 'minit';
+    final minionpass = prefs.getString('minionpass') ?? 'minit';
 
     final client = SSHClient(
       await SSHSocket.connect(minionip, 22),
-        username: 'minit',
-        onPasswordRequest: () => 'minit',
+        username: minionuser,
+        onPasswordRequest: () => minionpass,
     );
 
     final sftp = await client.sftp();
