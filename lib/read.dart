@@ -288,7 +288,7 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
 
                         print(totalcount);
 
-                        var currentcount = 0;
+                        var currentcount = 1;
 
                         for (var item in items) {
                           if(item.attr.isFile) {
@@ -304,6 +304,8 @@ class _ReadingPageState extends State<ReadingPage> with TickerProviderStateMixin
                               final content = await file.readBytes();
                               final f = new File(item.filename);
                               f.writeAsBytesSync(content);
+
+                              currentcount++;
 
                              // sleep(Duration(seconds:1));
                             }
